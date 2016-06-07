@@ -1,0 +1,82 @@
+.modal{
+ 
+    background: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    /* text-transform: uppercase; */
+    font-weight: 100;
+    border: 1px solid #d3e0e9;
+    border-radius: 4px;
+    z-index: 2;
+
+}
+/*Modal-p (position) special css for cards*/
+.modal-p{
+    background: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    border-radius: 4px;
+    z-index: 2;
+    margin-left: -280px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+
+}
+
+.modal-header .close{
+    visibility: hidden;
+    padding-left: 2px;
+}
+.modal-header:hover .close{
+    visibility: visible;
+}
+.modal input{
+	background: rgba(27, 154, 170, 0);
+    border: 0px solid;
+    border-bottom: 1px dashed grey;
+    width: 135px;
+	
+}
+.modal-p input{
+    background: rgba(27, 154, 170, 0);
+
+    border: 0px solid;
+    border-bottom: 1px dashed grey;
+    width: 135px;
+    
+}
+
+.modal-header {
+        cursor: -webkit-grab;
+	padding: 5px 5px;
+    border-bottom: 0px solid #eee;
+}
+
+.nav {
+   margin-bottom: 0px;
+    }
+
+    .modal-body{
+        display: none;
+        
+    	padding:0px;
+    	padding-left: 5px;
+
+    }
+.modal:hover .modal-body{
+    display: block;
+}
+.modal-p:hover .modal-body{
+    display: block;
+}
+.comment-box{
+        padding-left: 5px;
+}
+
+    .info-btn{
+    float: right!important;
+    padding-right: 5px!important;
+    }
+    .info-mail{
+        display: none;
+    }

@@ -1,0 +1,101 @@
+<template name="panel">
+	<div class="container">
+		   <div class="">
+		<h1>Panel</h1>
+      {{#if currentUser}}
+   
+     
+       {{else}}
+       <div class="static-message">
+         <!-- <strong>You have to <a href='/login'>login</a> to create new sessions</strong> -->
+         <strong> <a href='/login'>Log in</a> om nieuwe sessies te kunnen starten.</strong>
+        </div>
+      {{/if}}
+
+		<form  class="new-sessie form--login" >
+          <div class="switch white">
+
+      <input type="radio" name="switch" id="switch-off" value="discussion" checked>
+      <input type="radio" name="switch" id="switch-on" value="brainstorm" >
+
+      <label for="switch-off">Discussie</label>
+      <label for="switch-on">Brainstorm</label>
+
+      <span class="toggle"></span>
+
+    </div> 
+       <div class="form__field">
+          <input name="text" type="text" class="form__input" id="form_input_topic" placeholder="Onderwerp" required>
+        </div>
+      <div class="double_form_field ">
+          <input name="lefttext" type="text" class="form__input_left span4" placeholder="Links (Tegen)" > 
+          <input name="righttext" type="text" class="form__input_right span4" placeholder="Rechts (Voor)">
+
+
+
+        </div>
+          <div class="form__field descriptionarea">
+          <input name="description" type="textarea" class="form__input" placeholder="Toelichting " >
+        </div>
+        <div id="" class="checkbox form__field">
+          <label>
+  <input type="checkbox" name="anonymous" value="anonymous">Anoniem 
+  </label>
+  </div>
+        <div class=" ">
+          <input type="submit" value="Start">
+      </div>
+
+		</form>
+		</div>
+    <div class="row">
+           {{#if currentUser}}
+         <h3>Actieve Sessies</h3>
+         {{/if}}
+      {{#each sessies}}
+        {{> sessie}}
+      {{/each}}
+    </div>
+
+	</div>
+<section id="section-example" >
+  <div class="container ">
+    <h3>Sessie voorbeelden</h3>
+    <!-- <h3>Session Examples</h3> -->
+<div class="row">
+  <div class="span6 example-box"><a href="/home/uwzibb" title="Studiefinanciering example"><img src="images/screenshot-example1.png" width="100%"></a></div>
+  <div class="span6 example-box"><a href="/home/t5qcty" title="Aardgas vs Geotherme example"><img src="images/screenshot-example2.png" width="100%"></a></div>
+  </div>
+  </div>
+
+
+
+</section>
+
+
+</template>
+
+
+
+<template name="sessie">
+
+
+    <div class="span4 sessie-box" style="{{#if isOwner}}background-color:#3FD697;{{/if}}">
+      <span class="delete">&times;</span>
+           <a href="/home/{{random}}"> 
+          <ul>
+              <li class="topic">{{text}}</li>
+              <!-- <li class="left50">{{lefttext}}</li> -->
+              <!-- <li class="right50">{{righttext}}</li> -->
+              <!-- <li>{{#if isOwner}} {{email}}{{/if}}</li> -->
+
+           </ul>
+
+    <div class="bottomlayer">
+      <!-- <span class="bignum">-</span><span class="numname"> cards</span> -->
+    </div>
+    </a>
+  </div>
+  </template>
+
+

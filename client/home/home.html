@@ -1,0 +1,111 @@
+
+<template name="home" class="template-home">
+
+  <div class="container-fluid schema" id="panel" >
+
+    <div class="upperaxis">
+      <div class="mid-upperaxis">
+        <div class="axis-card">
+          <!-- Show session Topic or input to edit -->
+      {{#if editing_session}}
+      <input class="input input-medium session-topic" value="{{text}}" type="text"/>
+      {{else}}
+     <h3 class="topic-h3">{{text}}</h3>
+      {{/if}}
+<!-- Join session with profile -->
+<button id="join-session">Join Session </button> 
+<button id="leave-session"> Leave Session </button>
+<!-- Open Description box -->
+  <span class="glyphicon glyphicon-info-sign text-muted open-desc"> Toelichting</span>
+  <div class="axis-card-info">
+        {{#if editing_session}}
+      <input class="input input-medium session-description"  value="{{text}}" type="text"/>
+      {{else}}
+    <p class="description-p"> {{description}}</p>
+      {{/if}}
+      <br>
+ <span class="glyphicon glyphicon-menu-up text-muted close-desc"> Close</span></div>
+        </div>
+      </div>
+    </div>
+    {{#each positions}}
+      {{>position}}
+    {{/each}}
+
+    {{#each items}}
+      {{>fielditem}}
+    {{/each}}
+
+    {{#each persons}}
+      {{>person}}
+    {{/each}}
+  </div>
+
+
+
+
+<div class="axis row">
+	<div class="column left-value"><h2 >{{lefttext}}</h2></div>
+	<div class="column mid-value"><p>
+	'Double click' in field to add a card
+  <br>
+  Press 'enter' to save new input
+
+</p></div>
+		<div class="column right-value"><h2>{{righttext}}</h2></div>
+	</div>
+
+
+</template>
+
+
+
+	<template name="fielditem">
+  <div id="{{_id}}" style="background-color:{{color}};position:absolute;left:{{percentLeft}};top:{{percentTop}};width:200px;" class="modal fielditem">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">X</a>
+      {{#if editing_tablename}}
+      <input class="input input-medium tablename" value="{{name}}" type="textarea"/>
+      {{else}}
+      <h4 class="tablename"><i class="icon "></i> {{name}} </h4>
+      {{/if}}
+      <input type="text" class="demo1 tablename-color" value="{{color}}" />
+    </div>
+
+  </div>
+</template>
+
+
+
+<template name="home-off" class="template-home-mobile">
+
+<div class="container">
+  <div class="row span12">
+      <h4>Add your idea:</h4>
+       <input class="input input-medium tablename" value="{{name}}" type="textarea"/>
+    </div>
+</div>
+
+
+<div class="axis row">
+  <div class="column left-value"><h2 >{{lefttext}}</h2></div>
+  <div class="column mid-value"><p>
+  'Double click' in field to add a card
+  <br>
+  Press 'enter' to save new input
+
+</p></div>
+    <div class="column right-value"><h2>{{righttext}}</h2></div>
+  </div>
+
+</template>
+
+<template name="person">
+   <div id="{{_id}}" style="position:absolute;left:{{percentLeft}};top:{{percentTop}};border:1px solid grey;border-radius:50%;" class="person-p ">
+    <div class="person-header">
+    <img style="border-radius:50%;" src="{{picUrl}}" />
+    </div>
+   </div>
+</template>
+
+

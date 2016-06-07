@@ -1,0 +1,27 @@
+
+<template name="login">
+ <div class="container">
+    <div class="grid__container">
+      <h1>Log in</h1>
+      <form action="" method="post" class="form form--login">
+        
+        <div class="form__field">
+          <input id="login__username" name="loginEmail" type="text" class="form__input" placeholder="Email" required>
+        </div>
+
+        <div class="form__field">
+          <input id="login__password" type="password"  name="loginPassword" class="form__input" placeholder="Wachtwoord" required>
+        </div>
+
+        <div class="form__field">
+          <input type="submit" value="Log in">
+        </div>
+
+      </form>
+
+      <p class="text--center"> Nog geen account?  <!-- Not a member?  --><a href="{{pathFor 'register'}}"> Registreer hier <!-- Sign up now --></a> <span class="fontawesome-arrow-right"></span></p>
+
+    </div>
+
+  </div>
+</template>

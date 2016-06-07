@@ -1,0 +1,39 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+insecure
+jquery
+twbs:bootstrap
+mizzao:jquery-ui
+iron:router
+accounts-ui
+accounts-password
+chriswessels:slideout
+mrt:flash-messages
+pauli:accounts-linkedin
+risul:bootstrap-colorpicker
+jeremy:snapsvg
+coffeescript
+johnantoni:meteor-appear
+matb33:bootstrap-glyphicons
+accounts-oauth
+awatson1978:browser-detection
+gravitum:popup-views
+
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+standard-minifier-css
+standard-minifier-js

@@ -1,0 +1,18 @@
+<template name="dbfield">
+  <li id="{{username}}">
+    <div id="{{_id}}" class="comment-box">
+      {{#if editing_field}}
+      <input type="text" class="input input-medium efield" onClick="this.select();" name="efield" value="{{name}}"/>
+       <i class="icon icon-remove-sign comment-remove" title="Remove comment" > </i>
+
+      {{else}}
+      <i class="icon icon-comment" title="" > </i>
+      <!-- <i class="icon icon-comment" title="By: {{username}}" > </i> -->
+      <span class="muted">
+        {{name}}
+      </span>
+
+      {{/if}}
+    </div>
+  </li>
+</template>

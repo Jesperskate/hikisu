@@ -1,0 +1,73 @@
+
+<head>
+<title>Hikisu | Online Discussion Support System</title>
+<meta name="description" content="A powerful tool to improve your decision making">
+<meta name="keywords" content="Brainstorm, Discuss, Online, decision making">
+<meta name="author" content="Jesper Voorendt">
+<meta http-equiv="cleartype" content="on">
+<meta name="MobileOptimized" content="320">
+<meta name="HandheldFriendly" content="True">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+
+
+</head>
+
+<template name="layout">
+	
+	 <div id="slideout-menu" class="slideout-menu">
+    <div id="menu-header"><a href="{{pathFor 'info'}}">
+        <div class="logo">
+          <div class="upper layer"><div class="line"></div>  <div class="line2"></div></div>
+          <div class="middle layer text">HIKISU</div>
+          <div class="bottom layer">
+           <div class="line"></div>
+           <div class="line2"></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  
+    <ul id="menu-list">
+      <a id="newSession" href="{{pathFor 'panel'}}"><li> Panel</li></a>
+    	<a id="newSession" href="{{pathFor 'game'}}"><li> Game</li></a>
+      <a  id="newSession" href="{{pathFor 'help'}}"><li> Help</li></a>    	
+    	   {{#if currentUser}}
+         <hr>
+         <div id="MenuDiv"><img src="{{profilePictureUrl}}" /></div>
+         <li><span id="usermenu-email">{{email}}{{emailLinkedIn}}</span></li>
+       <a id="newSession" href="#" class="logout"><li>Log uit</li></a>
+    {{else}}
+        <div class="btns-group">
+          <a href="{{pathFor 'login'}}" class="btn-secondary"><div id="btndiv">Log in</div></a>
+          <a href="{{pathFor 'register'}}" class="btn-secondary"><div id="btndiv">Registreer</div></a>
+        </div>
+    {{/if}}
+    </ul>
+  </div>
+
+  <div id="content" >
+    <span id="togglebtn" title="Open menu">☰</span>
+    {{#if isOwner }}
+     <span id="addFieldItem" class="addFieldItem" title="Add field item" >+</span>
+     {{/if}}
+      {{> flashMessages}}
+    {{> yield}}
+  </div>
+
+  
+  <script type="text/javascript">
+
+
+
+var _urq = _urq || [];
+_urq.push(['initSite', '5e56595f-76ff-4406-87b6-41c563b6dc78']);
+(function() {
+var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+})();
+</script>
+        <script type="text/javascript" src="https://daks2k3a4ib2z.cloudfront.net/5317d67d660658b254000454/js/webflow.js?2f83b8326cc4c8f7327b5dba30444a37"></script>
+</template>

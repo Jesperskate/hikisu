@@ -1,0 +1,29 @@
+<template name="position">
+  <div id="{{_id}}" style="position:absolute;left:{{percentLeft}};top:{{percentTop}};width:170px;border:{{votes}}px solid grey;" class="modal-p ">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">X</a>
+      {{#if editing_tablename}}
+      <input class="input input-medium tablename"  onClick="this.select();" value="{{name}}" type="textarea"/>
+      {{else}}
+      <p class="tablename"><i class="icon "></i> {{name}} </p>
+      {{/if}}
+    </div>
+
+      <ul class="nav nav-pills nav-stacked">
+        {{#each dbfields}}
+          {{>dbfield}}
+        {{/each}}
+      </ul>
+          <div class="modal-body">
+        <span class=" addfield"><a>Add Comment</a></span><span  class="vote" title="{{uservotes}}" > Vote: {{votes}} </span> 
+
+ <!--   Anoniem optioneel maken
+    {{#with privacy }}
+        <a  class="info-btn" >Info</a><br>
+        {{/with}}
+
+        <span class="info-mail" title="Card owner">{{username}}</span> -->
+   </div>
+
+  </div>
+</template>
