@@ -125,7 +125,7 @@ Template.home.events ({
 Template.layout.events({
   'click .addFieldItem': function (evt, tmpl) {
    var currentCode = Router.current().params._id;
-   var sessieOwner = Sessies.findOne({random: currentCode}).owner;
+   var sessieOwner = Sessies.findOne({random: currentCode}, {fields: {'owner':1}});
 
     if ( Meteor.userId() !== sessieOwner) { 
       var message = "You have to be the host of this session to add field cards.";
@@ -281,7 +281,7 @@ Template.fielditem.rendered = function () {
     }
   });
      var currentCode = Router.current().params._id;
-   var sessieOwner = Sessies.findOne({random: currentCode}).owner ;
+   var sessieOwner = Sessies.findOne({random: currentCode}, {fields: {'owner':1}}) ;
      if ( Meteor.userId() == sessieOwner) {
         $('.demo1').css('display','block');   
         $('.demo1').colorpicker();

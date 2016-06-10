@@ -3,6 +3,7 @@ if (Meteor.isClient) {
   var slideout;
 
     Meteor.subscribe("sessies");
+    Meteor.subscribe("users");
 
 
   // Auto-close the menu on route stop (when navigating to a new route)
@@ -11,10 +12,6 @@ if (Meteor.isClient) {
       slideout.close();
     }
   });
-
-
-
-
 
     // Setup code for Slideout menu in layout
   Template.layout.onRendered(function () {
@@ -33,17 +30,17 @@ if (Meteor.isClient) {
     email: function() {return Meteor.user().emails[0].address},
     isOwner: function () {
        var currentCode = Router.current().params._id;
-       var sessieOwner = Sessies.findOne({random: currentCode}).owner ;
-       if(Meteor.userId() == sessieOwner){ return true;}
+       var sessieOwner = Sessies.findOne({random: currentCode}, {fields: {'owner':1}}) ;
+       if(Meteor.userId() === sessieOwner){ return true;}
        else{
             return false;}
      },
-    emailLinkedIn: function(){
-        return Meteor.user().profile.emailAddress;
-    },
-    profilePictureUrl: function() {
-        return Meteor.user().services.linkedin.pictureUrl;
-    }
+    // emailLinkedIn: function(){
+    //     return Meteor.user().profile.emailAddress;
+    // },
+    // profilePictureUrl: function() {
+    //     return Meteor.user().services.linkedin.pictureUrl;
+    // }
   });
 
   Template.layout.events({

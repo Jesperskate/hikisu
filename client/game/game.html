@@ -11,19 +11,23 @@
       <button id="newGameBtn">New Game</button>
       <button id="newPlayerBtn" >Deelnemen</button>
       {{/if }}
+
       </center>
     </div>    
-    <div class="actbox">
+    <div class="actbox" >
       {{#each deelnemers}}
-        <div class="span4 actcard" >{{speleremail}}</div>  
+        <div id="{{spelerID}}" class="span4 actcard" >{{speleremail}} | x:{{x}} | y:{{y}} | z:{{z}}</div>  
         <!-- {{>position}} -->
+
+        {{else}} 
+         <div class="span4 center" >Geen deelnemers in het spel</div>
       {{/each}}
 
 
 
   
 
-     <div class="span4 actcard" >Bootstrap card passief</div>
+    
     </div>
 
 

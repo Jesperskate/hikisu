@@ -1,7 +1,14 @@
-if(Meteor.isClient){
 
   Meteor.subscribe("spellen");
   Meteor.subscribe("deelnemers");
+
+
+
+
+
+
+
+
 
 // Open sessie by get var from url
   Router.route('/game/:_id', function () {
@@ -14,21 +21,37 @@ if(Meteor.isClient){
     });
   });
 
-// dit is voor de scroll fix in de frontpage met slide out menu
-Template.game.onRendered(function () {
-   $( "#content" ).css("height", "100%");
-});
-  
-Template.game.events ({
-  'click #newGameBtn': function(){
-    Meteor.popUp("addGame");
+  // dit is voor de scroll fix in de frontpage met slide out menu
+  Template.game.onRendered(function () {
+     $( "#content" ).css("height", "100%");
+  });
+    
+  Template.game.events ({
+    'click #newGameBtn': function(){
+      Meteor.popUp("addGame");
 
-  },  
-  'click #newPlayerBtn': function(){
-    Meteor.popUp("addPlayer");
+    },  
+    'click #newPlayerBtn': function(){
+      Meteor.popUp("addPlayer");
 
-  }
+    },    
+    'click #joinAsHost': function(){
+
+      // Deelnemers.insert({
+      //     spelerID: spelerID,
+      //     speleremail: speleremail,
+      //     spelcode: spelcode,
+      //     createdAt: new Date(), // current time
+      //     x: 0,
+      //     y: 0,
+      //     z: 0
+      //   });
+      
+
+    }
   });  
+
+
 Template.addGame.events ({
   'submit': function(event, template) {
       event.preventDefault();
@@ -50,9 +73,20 @@ Template.addGame.events ({
           createdAt: new Date() // current time
         });
 
+      var spelcodeStr =  spelcode.toString();
+
+      console.log("Spel aangemaakt en spelcodeStr: "+spelcodeStr);
 
 
-      console.log("Spel aangemaakt ");
+      Deelnemers.insert({
+          spelerID: Meteor.userId(),
+          speleremail: Meteor.user().emails[0].address,
+          spelcode: spelcodeStr,
+          createdAt: new Date(), // current time
+          x: 0,
+          y: 0,
+          z: 0
+        });
 
        
         event.target.spelnaam.value = "";
@@ -81,17 +115,17 @@ Template.addPlayer.events ({
         return false;
       }
 
-
-        Deelnemers.insert({
+       Meteor.call('addPlayer', Meteor.userId(), spelcode);
+        // Deelnemers.insert({
           
-          spelerID: spelerID,
-          speleremail: speleremail,
-          spelcode: spelcode,
-          createdAt: new Date(), // current time
-          x: 0,
-          y: 0,
-          z: 0
-        });
+        //   spelerID: spelerID,
+        //   speleremail: speleremail,
+        //   spelcode: spelcode,
+        //   createdAt: new Date(), // current time
+        //   x: 0,
+        //   y: 0,
+        //   z: 0
+        // });
 
 
 
@@ -117,7 +151,6 @@ Template.layout.events({
 //Load collections into game template
 Template.game.helpers({
     currentCod: function(){
-
         return Router.current().params._id;
       },
     deelnemers: function() {
@@ -125,13 +158,49 @@ Template.game.helpers({
         // get all positions with sessieID
           return Deelnemers.find({spelcode: sessieCode});
     },
+
 });
 
 
 
+  // device orientation code. Always running?
+ if (window.DeviceOrientationEvent) {
+      // Our browser supports DeviceOrientation
+     window.addEventListener("deviceorientation", function(event) {
+      if(event.alpha !== null){
+       console.log( 'test '+ event.alpha, event.beta, event.gamma);
 
-}//end Meteor isclient 
+       var idFocus = '#'+Meteor.userId();
+       var idDeelnemer = Deelnemers.findOne({spelerID: Meteor.userId(), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
+       console.log('idDeelnemer: '+idDeelnemer);
 
-if(Meteor.isServer){
+       var x = event.beta;
+       var y = event.gamma;
+       var z = event.alpha;
 
-}
+        // if beta / alfa / gamma > 30 set colort to..
+        if (event.alpha > 30) {
+          console.log('alpha is groter dan 30'+idFocus);
+           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+        };      
+        if (event.beta > 30) {
+          console.log('beta is groter dan 30');
+          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+        };      
+        if (event.gamma > 30) {
+          console.log('gamma is groter dan 30');
+          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+        };
+      }
+      else{
+        console.log('event.alpha is null');
+        return false;
+      }
+        // get object of owner...? via #id or 
+      }, true);
+  }
+  else{
+      console.log('deviceorientation not supported in this browser')
+  }
+
+

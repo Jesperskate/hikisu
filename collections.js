@@ -9,8 +9,10 @@ Spellen = new Mongo.Collection("spellen");
 Deelnemers = new Mongo.Collection("deelnemers");
 
 if (Meteor.isServer) {
-
-	Meteor.publish("sessies", function () {
+    Meteor.publish("users", function(){
+      return Meteor.users.find({});
+    })
+	 Meteor.publish("sessies", function () {
     	return Sessies.find();
   	});
   	Meteor.publish("positions", function () {
@@ -34,6 +36,23 @@ if (Meteor.isServer) {
   	Meteor.publish("deelnemers", function () {
     	return Deelnemers.find();
   	});
+
+
+    Deelnemers.allow({
+      insert: function (userId, doc) {
+        return !!userId;
+      },
+      update: function (userId, doc) {
+        return !!userId;
+      }
+    }); 
+
+    Spellen.allow({
+      insert: function (userId, doc) {
+        return !!userId;
+      }
+    });
+
 
 	Meteor.publish("user_linkedin_data", function(){
 		var projectie = { 
