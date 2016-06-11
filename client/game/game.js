@@ -35,18 +35,8 @@
       Meteor.popUp("addPlayer");
 
     },    
-    'click #joinAsHost': function(){
-
-      // Deelnemers.insert({
-      //     spelerID: spelerID,
-      //     speleremail: speleremail,
-      //     spelcode: spelcode,
-      //     createdAt: new Date(), // current time
-      //     x: 0,
-      //     y: 0,
-      //     z: 0
-      //   });
-      
+    'click #removePlayer': function(){
+      Meteor.call('removePlayer',this._id);
 
     }
   });  
@@ -76,18 +66,6 @@ Template.addGame.events ({
       var spelcodeStr =  spelcode.toString();
 
       console.log("Spel aangemaakt en spelcodeStr: "+spelcodeStr);
-
-
-      Deelnemers.insert({
-          spelerID: Meteor.userId(),
-          speleremail: Meteor.user().emails[0].address,
-          spelcode: spelcodeStr,
-          createdAt: new Date(), // current time
-          x: 0,
-          y: 0,
-          z: 0
-        });
-
        
         event.target.spelnaam.value = "";
 
@@ -104,33 +82,30 @@ Template.addPlayer.events ({
   'submit': function(event, template) {
       event.preventDefault();
       var typespel = 1;
-      var spelerID = Meteor.userId();
-      console.log('spelerID: '+spelerID);
-      var speleremail = Meteor.user().emails[0].address;
+      
+      var speleremail = event.target.email.value;
       var spelcode = event.target.spelcode.value;
+
+      Session.set("spelerEmail", speleremail);
 
       if (!spelcode || spelcode === undefined) {
         console.log('Code is vereist');
          $('#spelcode').css('border', '1px solid red'); 
         return false;
       }
+      var checkExist = Deelnemers.findOne({'speleremail': speleremail, 'spelcode': spelcode});
 
-       Meteor.call('addPlayer', Meteor.userId(), spelcode);
-        // Deelnemers.insert({
-          
-        //   spelerID: spelerID,
-        //   speleremail: speleremail,
-        //   spelcode: spelcode,
-        //   createdAt: new Date(), // current time
-        //   x: 0,
-        //   y: 0,
-        //   z: 0
-        // });
+      if (checkExist) {
+          FlashMessages.sendSuccess('Deelnemers is al in spel, daarom sturen we je hierheen ;) ');
+          Meteor.popDown('addPlayer');
+          Router.go('/game/'+spelcode);
+          return false;
 
-
-
-      console.log("Deelnemer toegevoegd ");
-
+      }
+      else {
+        Meteor.call('addPlayer', speleremail, spelcode);
+        console.log("Deelnemer toegevoegd ");         
+      }
        
         event.target.spelcode.value = "";
 
@@ -164,23 +139,25 @@ Template.game.helpers({
 
 
   // device orientation code. Always running?
- if (window.DeviceOrientationEvent) {
+
       // Our browser supports DeviceOrientation
      window.addEventListener("deviceorientation", function(event) {
       if(event.alpha !== null){
-       console.log( 'test '+ event.alpha, event.beta, event.gamma);
+       console.log(event.alpha, event.beta, event.gamma);
+
+       console.log('Sessie Email: '+ Session.get('spelerEmail'));
 
        var idFocus = '#'+Meteor.userId();
-       var idDeelnemer = Deelnemers.findOne({spelerID: Meteor.userId(), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
+       var idDeelnemer = Deelnemers.findOne({speleremail: Session.get('spelerEmail'), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
        console.log('idDeelnemer: '+idDeelnemer);
 
-       var x = event.beta;
-       var y = event.gamma;
-       var z = event.alpha;
+       var x = event.beta.toFixed(0);
+       var y = event.gamma.toFixed(0);
+       var z = event.alpha.toFixed(0);
 
         // if beta / alfa / gamma > 30 set colort to..
         if (event.alpha > 30) {
-          console.log('alpha is groter dan 30'+idFocus);
+          console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
         };      
         if (event.beta > 30) {
@@ -198,9 +175,9 @@ Template.game.helpers({
       }
         // get object of owner...? via #id or 
       }, true);
-  }
-  else{
-      console.log('deviceorientation not supported in this browser')
+  
+  if (!window.DeviceOrientationEvent) {
+       console.log('deviceorientation not supported in this browser')
   }
 
 

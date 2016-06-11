@@ -8,19 +8,28 @@
       <p class="spelcode" >{{currentCod}}</p>
       
       {{ else }}
-      <button id="newGameBtn">New Game</button>
-      <button id="newPlayerBtn" >Deelnemen</button>
+      <button id="newGameBtn" class="btn btn-default">Nieuw Spel</button>
+      <button id="newPlayerBtn" class="btn btn-primary">Deelnemen</button>
       {{/if }}
 
       </center>
     </div>    
     <div class="actbox" >
       {{#each deelnemers}}
-        <div id="{{spelerID}}" class="span4 actcard" >{{speleremail}} | x:{{x}} | y:{{y}} | z:{{z}}</div>  
+        <div id="{{spelerID}} speler{{@index}}" class="span4 actcard" >{{speleremail}} | x:{{x}} | y:{{y}} | z:{{z}}
+
+          <span id="removePlayer">X</span></div>  
         <!-- {{>position}} -->
 
         {{else}} 
-         <div class="span4 center" >Geen deelnemers in het spel</div>
+
+          {{#if currentCod}}
+           <div class="span4 center-text" >Geen deelnemers in het spel</div>
+          
+          {{ else }}  
+          <div class="span4 center-text" >Start een nieuw spel en neem deel aan een spel.</div>
+          {{/if }}
+         
       {{/each}}
 
 
@@ -67,7 +76,7 @@
           </div> 
           <div class="form-group"> 
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="blue-btn full-width">Start</button>
+              <button type="submit" class="btn btn-primary">Start</button>
             </div>
           </div>
         </form>
@@ -97,7 +106,12 @@
       <div class="modal-body">
         <p>Voer het 4-cijferige code in om deel te nemen</p>
         <form class="form-horizontal mail-form" role="form">
-          
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="naam">Email:</label>
+            <div class="col-sm-8"> 
+              <input type="email" id="email" class="form-control" name="email" placeholder="Uw email" >
+            </div>
+          </div> 
 
           <div class="form-group">
             <label class="control-label col-sm-4" for="naam">Deelname code:</label>
@@ -107,7 +121,7 @@
           </div> 
           <div class="form-group"> 
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="blue-btn full-width">Start</button>
+              <button type="submit" class="btn btn-primary">Start</button>
             </div>
           </div>
         </form>

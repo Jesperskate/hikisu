@@ -32,3 +32,9 @@ body, html{
 .spelcode{
   font-size: 40px;
 }
+.center-text{
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  color:grey;
+}

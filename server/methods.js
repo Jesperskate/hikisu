@@ -1,14 +1,24 @@
   Meteor.methods({
-    addPlayer: function(userId, spelcode){
+    addPlayer: function(userEmail, spelcode){
       Deelnemers.insert({
-        spelerID: userId,
-        speleremail: Meteor.user().emails[0].address,
+        speleremail: userEmail,
         spelcode: spelcode,
         createdAt: new Date(), // current time
         x: 0,
         y: 0,
         z: 0
       });
+    },
+    removePlayer:function(userId){
+      // console.log('MeteorUserId: '+ MeteorUserId);
+      //console.log('this.spelerID: '+ this.spelerID);
+
+      // if(this.spelerID === MeteorUserId){
+        Deelnemers.remove(userId);
+      // }
+      // else { 
+      //   return false;
+      // }
     },
     updateGyro: function(id, newx, newy, newz){
 
