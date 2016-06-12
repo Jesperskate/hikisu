@@ -133,15 +133,16 @@ Template.game.helpers({
         // get all positions with sessieID
           return Deelnemers.find({spelcode: sessieCode});
     },
-    display: function (y) {
-      if ( y > 150 && y < 210){
+    display: function (input) {
+      if ( input > 150 && input < 210){
         return 'none';
       }
       else {
         return 'block';
       }
-    }      
+    }   
 });
+
 
 // alle bewegings detectie code
 if (window.DeviceOrientationEvent) {

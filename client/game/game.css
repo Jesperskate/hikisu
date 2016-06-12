@@ -38,3 +38,6 @@ body, html{
   font-size: 18px;
   color:grey;
 }
+.hide{
+  display: none;
+}

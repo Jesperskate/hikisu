@@ -14,7 +14,8 @@
     </div>    
     <div class="actbox " >
       {{#each deelnemers}}
-        <div id="{{spelerID}} speler{{@index}}" class="col-sm-4 actcard" style="border:3px solid RGB({{x}},{{y}},{{z}}); display:{{display y}};" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
+        <div id="speler{{@index}}" class="col-sm-4 actcard" style="border:3px solid RGB({{x}},{{y}},{{z}}); display:{{display y}};" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
+
           <span id="removePlayer">X</span></div>  
         {{else}} 
           {{#if currentCod}}
