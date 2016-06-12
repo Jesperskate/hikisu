@@ -126,12 +126,12 @@ Template.addPlayer.helpers({
 //Load collections into game template
 Template.game.helpers({
     currentCod: function(){
-        return Router.current().params._id;
-      },
+      return Router.current().params._id;
+    },
     deelnemers: function() {
-        var sessieCode = Router.current().params._id;
-        // get all positions with sessieID
-          return Deelnemers.find({spelcode: sessieCode});
+      var sessieCode = Router.current().params._id;
+      // get all positions with sessieID
+      return Deelnemers.find({spelcode: sessieCode});
     },
     display: function (input) {
       if ( input > 150 && input < 210){
@@ -140,7 +140,15 @@ Template.game.helpers({
       else {
         return 'block';
       }
-    }   
+    },
+    displayName: function(input) {
+      if ( input > 100 && input < 210){
+        return 'hide';
+      }
+      else {
+        return 'show'+ input;
+      }
+      } 
 });
 
 
@@ -184,16 +192,26 @@ if (window.DeviceOrientationEvent) {
 
   // >>>>>>>>>> Accelerometer <<<<<<<<<
     window.addEventListener("devicemotion", function(event) {
-        console.log("Accelerometer: "
-          + event.accelerationIncludingGravity.x + ", "
-          + event.accelerationIncludingGravity.y + ", "
-          + event.accelerationIncludingGravity.z
-        );
+        var accx = event.accelerationIncludingGravity.x;
+        var accy = event.accelerationIncludingGravity.y;
+        var accz = event.accelerationIncludingGravity.z;
+
+        if (accx !== null && accy !== null && accz !== null) {
+          accx.toFixed(0);
+          accy.toFixed(0);
+          accz.toFixed(0);
+        };
+        var acceleray = [
+          accx,
+          accy,
+          accz
+          ];
+        console.log('acceleray: '+acceleray);
         console.log('Sessie spelernaam: '+ Session.get('spelernaam'));
         if (Session.get('spelernaam') && Router.current().params._id) {
           console.log(Session.get('spelernaam'), Router.current().params._id);
           // var idDeelnemer = Deelnemers.findOne({'spelernaam': Session.get('spelernaam'), 'spelcode': Router.current().params._id}, {fields: {'_id':1}})._id;
-          Meteor.call('updateAccelero', Session.get('spelerid'), event.accelerationIncludingGravity.x); 
+          Meteor.call('updateAccelero', Session.get('spelerid'), acceleray); 
         }else{
           console.log('Geen speler gevonden. Er mist een sessie of een spelcode')
         }

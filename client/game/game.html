@@ -1,4 +1,5 @@
 
+
 <template name="game" class="template-game">
 
   <div class="container-fluid schema" id="panel" >
@@ -14,7 +15,7 @@
     </div>    
     <div class="actbox " >
       {{#each deelnemers}}
-        <div id="speler{{@index}}" class="col-sm-4 actcard" style="border:3px solid RGB({{x}},{{y}},{{z}}); display:{{display y}};" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
+        <div id="speler{{@index}}" class="col-sm-4 actcard {{displayName y }}" style="border:3px solid RGB({{x}},{{y}},{{z}}); " >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} | {{displayName y }}
 
           <span id="removePlayer">X</span></div>  
         {{else}} 
