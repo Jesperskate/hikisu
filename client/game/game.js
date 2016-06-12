@@ -132,6 +132,14 @@ Template.game.helpers({
         var sessieCode = Router.current().params._id;
         // get all positions with sessieID
           return Deelnemers.find({spelcode: sessieCode});
+    },
+    display: function (y) {
+      if ( y > 150 && y < 210){
+        return 'none';
+      }
+      else {
+        return 'block';
+      }
     }      
 });
 

@@ -12,15 +12,15 @@
       {{/if }}
       </center>
     </div>    
-    <div class="actbox" >
+    <div class="actbox " >
       {{#each deelnemers}}
-        <div id="{{spelerID}} speler{{@index}}" class="span4 actcard" style="background-color:RGB({{x}},{{y}},{{z}});" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
+        <div id="{{spelerID}} speler{{@index}}" class="col-sm-4 actcard" style="border:3px solid RGB({{x}},{{y}},{{z}}); display:{{display y}};" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
           <span id="removePlayer">X</span></div>  
         {{else}} 
           {{#if currentCod}}
-           <div class="span4 center-text" >Geen deelnemers in het spel</div>
+           <div class="col-sm-4 center-text" >Geen deelnemers in het spel</div>
           {{ else }}  
-          <div class="span4 center-text" >Start een nieuw spel en neem deel aan een spel.</div>
+          <div class="col-sm-4 center-text" >Start een nieuw spel en neem deel aan een spel.</div>
           {{/if }}    
       {{/each}} 
     </div>
