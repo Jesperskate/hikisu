@@ -2,22 +2,11 @@
   Meteor.subscribe("spellen");
   Meteor.subscribe("deelnemers");
 
-
-
-
-
-
-
-
-
+  
 // Open sessie by get var from url
   Router.route('/game/:_id', function () {
-    this.render('Game', {
-      data: function () {
-         var currentCode = this.params._id;  
-         console.log(currentCode);
-         return Sessies.findOne({random: currentCode});     
-      }
+    this.render('game', {
+      //niks nodig zover
     });
   });
 
@@ -83,17 +72,17 @@ Template.addPlayer.events ({
       event.preventDefault();
       var typespel = 1;
       
-      var speleremail = event.target.email.value;
+      var spelernaam = event.target.spelernaam.value;
       var spelcode = event.target.spelcode.value;
 
-      Session.set("spelerEmail", speleremail);
+
 
       if (!spelcode || spelcode === undefined) {
         console.log('Code is vereist');
          $('#spelcode').css('border', '1px solid red'); 
         return false;
       }
-      var checkExist = Deelnemers.findOne({'speleremail': speleremail, 'spelcode': spelcode});
+      var checkExist = Deelnemers.findOne({'spelernaam': spelernaam, 'spelcode': spelcode});
 
       if (checkExist) {
           FlashMessages.sendSuccess('Deelnemers is al in spel, daarom sturen we je hierheen ;) ');
@@ -103,24 +92,35 @@ Template.addPlayer.events ({
 
       }
       else {
-        Meteor.call('addPlayer', speleremail, spelcode);
-        console.log("Deelnemer toegevoegd ");         
+        Meteor.call('addPlayer', spelernaam, spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added deelnemer._id: '+result);
+                  Session.setPersistent('spelerid', result);
+              }
+          });        
       }
        
-        event.target.spelcode.value = "";
-
-
-          Meteor.popDown('addPlayer');
-          Router.go('/game/'+spelcode);
-
-          FlashMessages.sendSuccess("Nieuwe deelnemer toevoegen gelukt");
+        event.target.spelcode.value = ""; //clear input field
+        Session.setPersistent("spelernaam", spelernaam);
+        Meteor.popDown('addPlayer');
+        Router.go('/game/'+spelcode);
+        FlashMessages.sendSuccess("Nieuwe deelnemer toevoegen gelukt");
 
     }
   });
+Template.addPlayer.helpers({
+  currentSpelerNaam: function(){
+    if (Session.get('spelernaam')) {
+      return Session.get('spelernaam');
+    }
+    else{
+      return false;
+    }
+  }
 
-  //Menu events
-Template.layout.events({
- 
 });
 
 //Load collections into game template
@@ -132,30 +132,29 @@ Template.game.helpers({
         var sessieCode = Router.current().params._id;
         // get all positions with sessieID
           return Deelnemers.find({spelcode: sessieCode});
-    },
-
+    }      
 });
 
+// alle bewegings detectie code
+if (window.DeviceOrientationEvent) {
+ console.log("DeviceOrientation is supported");
 
-
-  // device orientation code. Always running?
-
-      // Our browser supports DeviceOrientation
-     window.addEventListener("deviceorientation", function(event) {
-      if(event.alpha !== null){
+   window.addEventListener("deviceorientation", function(event) {
+    // handmatige check of deviceorientation mogelijk is:
+    if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
+    
        console.log(event.alpha, event.beta, event.gamma);
 
-       console.log('Sessie Email: '+ Session.get('spelerEmail'));
-
+    
+       var idDeelnemer = Session.get('spelerid');
        var idFocus = '#'+Meteor.userId();
-       var idDeelnemer = Deelnemers.findOne({speleremail: Session.get('spelerEmail'), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
-       console.log('idDeelnemer: '+idDeelnemer);
 
-       var x = event.beta.toFixed(0);
+
+       var x = event.beta.toFixed(0); // geen decimalen
        var y = event.gamma.toFixed(0);
        var z = event.alpha.toFixed(0);
 
-        // if beta / alfa / gamma > 30 set colort to..
+        // if beta / alfa / gamma > 30 set color to..
         if (event.alpha > 30) {
           console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
@@ -164,20 +163,63 @@ Template.game.helpers({
           console.log('beta is groter dan 30');
           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
         };      
-        if (event.gamma > 30) {
-          console.log('gamma is groter dan 30');
+        if (event.gamma >= 180) {
+          console.log('gamma is groter dan 180');
           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+
         };
-      }
-      else{
-        console.log('event.alpha is null');
+      } else{
         return false;
       }
-        // get object of owner...? via #id or 
-      }, true);
-  
+    }, true);
+
+  // >>>>>>>>>> Accelerometer <<<<<<<<<
+    window.addEventListener("devicemotion", function(event) {
+        console.log("Accelerometer: "
+          + event.accelerationIncludingGravity.x + ", "
+          + event.accelerationIncludingGravity.y + ", "
+          + event.accelerationIncludingGravity.z
+        );
+        console.log('Sessie spelernaam: '+ Session.get('spelernaam'));
+        if (Session.get('spelernaam') && Router.current().params._id) {
+          console.log(Session.get('spelernaam'), Router.current().params._id);
+          // var idDeelnemer = Deelnemers.findOne({'spelernaam': Session.get('spelernaam'), 'spelcode': Router.current().params._id}, {fields: {'_id':1}})._id;
+          Meteor.call('updateAccelero', Session.get('spelerid'), event.accelerationIncludingGravity.x); 
+        }else{
+          console.log('Geen speler gevonden. Er mist een sessie of een spelcode')
+        }
+      }
+    );
+    
+  }
   if (!window.DeviceOrientationEvent) {
        console.log('deviceorientation not supported in this browser')
   }
 
 
+
+
+
+
+
+// Leave game function
+
+Meteor.startup(function(){
+    $(window).bind('beforeunload', function() {
+        // closingWindow();
+        // var idDeelnemer = Deelnemers.findOne({spelernaam: Session.get('spelernaam'), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
+              
+        //     console.log('-------------------------------------------'+Session.get('spelernaam')+'-----'+idDeelnemer);
+
+        //         Meteor.call('removePlayer', idDeelnemer);
+
+        // have to return null, unless you want a chrome popup alert
+        return null;
+        //return 'Are you sure you want to leave?';
+    });
+});
+closingWindow = function(){
+    console.log('closingWindow');
+
+    // alert('bye');
+}

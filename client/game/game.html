@@ -5,50 +5,26 @@
     <div class="actmenu">
       <center>
       {{#if currentCod}}
-      <p class="spelcode" >{{currentCod}}</p>
-      
+        <p class="spelcode" >{{currentCod}}</p>
       {{ else }}
-      <button id="newGameBtn" class="btn btn-default">Nieuw Spel</button>
-      <button id="newPlayerBtn" class="btn btn-primary">Deelnemen</button>
+        <button id="newGameBtn" class="btn btn-default">Nieuw Spel</button>
+        <button id="newPlayerBtn" class="btn btn-primary">Deelnemen</button>
       {{/if }}
-
       </center>
     </div>    
     <div class="actbox" >
       {{#each deelnemers}}
-        <div id="{{spelerID}} speler{{@index}}" class="span4 actcard" >{{speleremail}} | x:{{x}} | y:{{y}} | z:{{z}}
-
+        <div id="{{spelerID}} speler{{@index}}" class="span4 actcard" style="background-color:RGB({{x}},{{y}},{{z}});" >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} |
           <span id="removePlayer">X</span></div>  
-        <!-- {{>position}} -->
-
         {{else}} 
-
           {{#if currentCod}}
            <div class="span4 center-text" >Geen deelnemers in het spel</div>
-          
           {{ else }}  
           <div class="span4 center-text" >Start een nieuw spel en neem deel aan een spel.</div>
-          {{/if }}
-         
-      {{/each}}
-
-
-
-  
-
-    
+          {{/if }}    
+      {{/each}} 
     </div>
-
-
-
-
   </div>
-
-
-
-
-
-
 </template>
 
 
@@ -64,12 +40,9 @@
         <h4 class="modal-title">Nieuw spel</h4>
       </div>
       <div class="modal-body">
-        <p>Een nieuw spel starten kan hier.</p>
         <form class="form-horizontal mail-form" role="form">
-          
-
           <div class="form-group">
-            <label class="control-label col-sm-4" for="naam">Naam Spel:</label>
+            <label class="control-label col-sm-4" for="naam">Groep/klasnaam:</label>
             <div class="col-sm-8"> 
               <input type="text" id="spelnaam" class="form-control" name="spelnaam" placeholder="Naam van spel" >
             </div>
@@ -107,9 +80,9 @@
         <p>Voer het 4-cijferige code in om deel te nemen</p>
         <form class="form-horizontal mail-form" role="form">
           <div class="form-group">
-            <label class="control-label col-sm-4" for="naam">Email:</label>
+            <label class="control-label col-sm-4" for="naam">Spelersnaam:</label>
             <div class="col-sm-8"> 
-              <input type="email" id="email" class="form-control" name="email" placeholder="Uw email" >
+              <input type="text" id="spelernaam" maxlength="30" class="form-control" name="spelernaam" placeholder="Jouw unieke naam" value="{{currentSpelerNaam}}" >
             </div>
           </div> 
 
