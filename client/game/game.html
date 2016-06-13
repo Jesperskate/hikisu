@@ -8,7 +8,11 @@
       {{#if currentCod}}
         <p class="spelcode" >{{currentCod}}</p>
 
-        
+        {{#if currentUser}}
+          <span id="removeAll"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          <span id="resetAll"><i class="fa fa-trash" aria-hidden="true"></i></span>
+
+        {{/if}}
       {{ else }}
         <button id="newGameBtn" class="btn btn-default">Nieuw Spel</button>
         <button id="newPlayerBtn" class="btn btn-primary">Deelnemen</button>

@@ -31,6 +31,23 @@
     'click #resetPlayer': function(){
       Meteor.call('clearPoints',this._id);
 
+    },
+    'click #removeAll': function(){
+      var find = Deelnemers.find({spelcode: Router.current().params._id}, {_id:1}).fetch();
+      console.log(find[0]._id);
+      for (var i = 0; i < find.length; i++) {
+
+        Meteor.call('removePlayer',find[i]._id);
+      };
+    },
+    'click #resetAll': function(){
+      var find = Deelnemers.find({spelcode: Router.current().params._id}, {_id:1}).fetch();
+      console.log(find[0]._id);
+      for (var i = 0; i < find.length; i++) {
+
+        Meteor.call('clearPoints',find[i]._id);
+      };
+
     }
   });  
 
