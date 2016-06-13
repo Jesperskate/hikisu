@@ -27,6 +27,10 @@
     'click #removePlayer': function(){
       Meteor.call('removePlayer',this._id);
 
+    },    
+    'click #resetPlayer': function(){
+      Meteor.call('clearPoints',this._id);
+
     }
   });  
 

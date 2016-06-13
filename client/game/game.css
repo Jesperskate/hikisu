@@ -47,3 +47,11 @@ body, html{
     background-color: #3fd697;
     
 }
+#removePlayer, #resetPlayer{
+    float: right;
+    padding-right: 5px;
+}
+.stats{
+  font-size: 10px;
+  color: grey;
+}
