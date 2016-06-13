@@ -133,7 +133,7 @@ Template.game.helpers({
       // get all positions with sessieID
       return Deelnemers.find({spelcode: sessieCode});
     },
-    displayName: function(input) {
+    displayBox: function(input) {
         // input is y (gamma)
         // if ( input > 70 && input < 210){
         //   return 'hide';
@@ -175,7 +175,7 @@ if (window.DeviceOrientationEvent) {
         if (event.alpha > 30 && event.alpha < 90) {
           console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-           Meteor.call('givePoints', idDeelnemer);
+           // Meteor.call('givePoints', idDeelnemer);
         };      
         if (event.beta > 30) {
           console.log('beta is groter dan 30');
@@ -194,15 +194,15 @@ if (window.DeviceOrientationEvent) {
 
   // >>>>>>>>>> Accelerometer <<<<<<<<<
     window.addEventListener("devicemotion", function(event) {
-        // var accx = Math.round(event.accelerationIncludingGravity.x*10) / 10;
-        // var accy = Math.round(event.accelerationIncludingGravity.y*10) / 10;
-        // var accz = Math.round(event.accelerationIncludingGravity.z*10) / 10;
+        var accx = Math.round(event.accelerationIncludingGravity.x*10) / 10;
+        var accy = Math.round(event.accelerationIncludingGravity.y*10) / 10;
+        var accz = Math.round(event.accelerationIncludingGravity.z*10) / 10;
         // Misschien is dit sneller:
-        if (accx !== null && accy !== null && accz !== null) {
-          accx.toFixed(0);
-          accy.toFixed(0);
-          accz.toFixed(0);
-        };
+        // if (accx !== null && accy !== null && accz !== null) {
+        //   accx.toFixed(0);
+        //   accy.toFixed(0);
+        //   accz.toFixed(0);
+        // };
         var acceleray = [
           accx,
           accy,

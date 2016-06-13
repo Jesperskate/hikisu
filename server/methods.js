@@ -63,7 +63,6 @@
       Deelnemers.update(id, {
         $set: {
           accelero: accelero
-
         }
       });
     }
