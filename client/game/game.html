@@ -9,8 +9,8 @@
         <p class="spelcode" >{{currentCod}}</p>
 
         {{#if currentUser}}
-          <span id="removeAll"><i class="fa fa-trash" aria-hidden="true"></i></span>
-          <span id="resetAll"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          <span id="removeAll"><i class="fa fa-trash " title="remove all players" aria-hidden="true"></i></span>
+          <span id="resetAll"><i class="fa fa-repeat" title="reset all players" aria-hidden="true"></i></span>
 
         {{/if}}
       {{ else }}
@@ -24,7 +24,7 @@
       <div class="col-sm-4 ">
         <div id="speler{{@index}}" class="actcard {{displayBox y }}" style="border:3px solid RGB({{x}},{{y}},{{z}}); " > {{spelernaam}}
           <!-- <span id="removePlayer"><i class="fa fa-trash" aria-hidden="true"></i></span> -->
-          <span id="resetPlayer"><i class="fa fa-repeat" aria-hidden="true"></i></span>
+          <span id="resetPlayer" class="float-right"><i class="fa fa-repeat" aria-hidden="true"></i></span>
 
          <br> 
          <span class="stats">x:{{x}} | y:{{y}} | z:{{z}} | acc: {{accelero}} </span>
