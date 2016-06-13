@@ -25,13 +25,10 @@
 
     },    
     clearPoints: function(userId){ 
-
       Deelnemers.update(userId, {$set: {
         points:0
         }
       });
-
-
     },
     removePlayer:function(userId){
         Deelnemers.remove(userId);

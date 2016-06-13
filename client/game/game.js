@@ -27,6 +27,10 @@
     'click #removePlayer': function(){
       Meteor.call('removePlayer',this._id);
 
+    },    
+    'click #resetPlayer': function(){
+      Meteor.call('clearPoints',this._id);
+
     }
   });  
 
@@ -175,7 +179,7 @@ if (window.DeviceOrientationEvent) {
         if (event.alpha > 30 && event.alpha < 90) {
           console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-           Meteor.call('givePoints', idDeelnemer);
+           // Meteor.call('givePoints', idDeelnemer);
         };      
         if (event.beta > 30) {
           console.log('beta is groter dan 30');
@@ -215,8 +219,6 @@ if (window.DeviceOrientationEvent) {
         function add(a, b) {
             return a + b;
         }
-
-    
         // console.log('Sessie spelernaam: '+ Session.get('spelernaam'));
         if (Session.get('spelernaam') && Router.current().params._id) {
           // console.log(Session.get('spelernaam'), Router.current().params._id);
@@ -224,8 +226,8 @@ if (window.DeviceOrientationEvent) {
 
           // if totale movement is groter dan 30
           if(sum > 30){
-            alert('sum is hoger dan 30');
-            Meteor.call('givePoints', idDeelnemer);
+            
+            Meteor.call('givePoints', Session.get('spelerid'));
           }
 
         }else{
