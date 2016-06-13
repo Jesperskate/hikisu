@@ -14,7 +14,7 @@
 
       return id; //[BUG!]
     },
-    givePoints: function(userId, currentPoints){
+    givePoints: function(userId){
       var currentPoints = Deelnemers.findOne(userId).points;
 
       Deelnemers.update(userId, {$set: {
@@ -34,18 +34,7 @@
 
     },
     removePlayer:function(userId){
-
         Deelnemers.remove(userId);
-      
-        // var foundname = Deelnemers.findOne({ _id: userId}).spelernaam;
-        // console.log(foundname+' is foundname');
-        // if (foundname === spelernaam) {
-        //   Deelnemers.remove(userId);
-        // }else{
-        //   return false;
-        // }
-        
-
     },
     updateGyro: function(id, newx, newy, newz){
 

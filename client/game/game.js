@@ -27,10 +27,6 @@
     'click #removePlayer': function(){
       Meteor.call('removePlayer',this._id);
 
-    },    
-    'click #resetPlayer': function(){
-      Meteor.call('clearPoints',this._id);
-
     }
   });  
 
@@ -179,7 +175,7 @@ if (window.DeviceOrientationEvent) {
         if (event.alpha > 30 && event.alpha < 90) {
           console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-           // Meteor.call('givePoints', idDeelnemer);
+           Meteor.call('givePoints', idDeelnemer);
         };      
         if (event.beta > 30) {
           console.log('beta is groter dan 30');
@@ -201,6 +197,7 @@ if (window.DeviceOrientationEvent) {
         var accx = Math.round(event.accelerationIncludingGravity.x*10) / 10;
         var accy = Math.round(event.accelerationIncludingGravity.y*10) / 10;
         var accz = Math.round(event.accelerationIncludingGravity.z*10) / 10;
+
         // Misschien is dit sneller:
         // if (accx !== null && accy !== null && accz !== null) {
         //   accx.toFixed(0);
@@ -227,6 +224,7 @@ if (window.DeviceOrientationEvent) {
 
           // if totale movement is groter dan 30
           if(sum > 30){
+            alert('sum is hoger dan 30');
             Meteor.call('givePoints', idDeelnemer);
           }
 

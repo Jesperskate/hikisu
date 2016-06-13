@@ -7,6 +7,8 @@
       <center>
       {{#if currentCod}}
         <p class="spelcode" >{{currentCod}}</p>
+
+        
       {{ else }}
         <button id="newGameBtn" class="btn btn-default">Nieuw Spel</button>
         <button id="newPlayerBtn" class="btn btn-primary">Deelnemen</button>
@@ -16,7 +18,7 @@
     <div class="actbox " >
       {{#each deelnemers}}
         <div id="speler{{@index}}" class="col-sm-4 actcard {{displayBox y }}" style="border:3px solid RGB({{x}},{{y}},{{z}}); " > {{spelernaam}}
-          <span id="removePlayer"><i class="fa fa-trash" aria-hidden="true"></i></span>
+          <!-- <span id="removePlayer"><i class="fa fa-trash" aria-hidden="true"></i></span> -->
           <span id="resetPlayer"><i class="fa fa-repeat" aria-hidden="true"></i></span>
 
          <br> 
