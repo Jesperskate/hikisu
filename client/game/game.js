@@ -133,36 +133,36 @@ Template.game.helpers({
       // get all positions with sessieID
       return Deelnemers.find({spelcode: sessieCode});
     },
-    display: function (input) {
-      if ( input > 150 && input < 210){
-        return 'none';
-      }
-      else {
-        return 'block';
-      }
-    },
     displayName: function(input) {
-      if ( input > 100 && input < 210){
-        return 'hide';
+        // input is y (gamma)
+        // if ( input > 70 && input < 210){
+        //   return 'hide';
+        // }
+        // else {
+          return 'show';
+        // }
+      },
+    displayScore: function(score) {
+
+        if (score < 101){
+          return score+'%';
+
+        }else{
+          return '100%';
+        }
       }
-      else {
-        return 'show'+ input;
-      }
-      } 
-});
+  });
 
 
 // alle bewegings detectie code
 if (window.DeviceOrientationEvent) {
  console.log("DeviceOrientation is supported");
-
    window.addEventListener("deviceorientation", function(event) {
     // handmatige check of deviceorientation mogelijk is:
     if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
     
-       console.log(event.alpha, event.beta, event.gamma);
+       // console.log(event.alpha, event.beta, event.gamma);
 
-    
        var idDeelnemer = Session.get('spelerid');
        var idFocus = '#'+Meteor.userId();
 
@@ -172,17 +172,19 @@ if (window.DeviceOrientationEvent) {
        var z = event.alpha.toFixed(0);
 
         // if beta / alfa / gamma > 30 set color to..
-        if (event.alpha > 30) {
+        if (event.alpha > 30 && event.alpha < 90) {
           console.log('alpha is groter dan 30');
            Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+           Meteor.call('givePoints', idDeelnemer);
         };      
         if (event.beta > 30) {
           console.log('beta is groter dan 30');
           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
         };      
-        if (event.gamma >= 180) {
-          console.log('gamma is groter dan 180');
+        if (event.gamma >= 80) {
+          console.log('gamma is groter dan 80');
           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
+          // Meteor.call('clearPoints', idDeelnemer);
 
         };
       } else{
@@ -192,10 +194,10 @@ if (window.DeviceOrientationEvent) {
 
   // >>>>>>>>>> Accelerometer <<<<<<<<<
     window.addEventListener("devicemotion", function(event) {
-        var accx = event.accelerationIncludingGravity.x;
-        var accy = event.accelerationIncludingGravity.y;
-        var accz = event.accelerationIncludingGravity.z;
-
+        // var accx = Math.round(event.accelerationIncludingGravity.x*10) / 10;
+        // var accy = Math.round(event.accelerationIncludingGravity.y*10) / 10;
+        // var accz = Math.round(event.accelerationIncludingGravity.z*10) / 10;
+        // Misschien is dit sneller:
         if (accx !== null && accy !== null && accz !== null) {
           accx.toFixed(0);
           accy.toFixed(0);
@@ -206,12 +208,24 @@ if (window.DeviceOrientationEvent) {
           accy,
           accz
           ];
-        console.log('acceleray: '+acceleray);
-        console.log('Sessie spelernaam: '+ Session.get('spelernaam'));
+
+        var sum = acceleray.reduce(add, 0);
+
+        function add(a, b) {
+            return a + b;
+        }
+
+    
+        // console.log('Sessie spelernaam: '+ Session.get('spelernaam'));
         if (Session.get('spelernaam') && Router.current().params._id) {
-          console.log(Session.get('spelernaam'), Router.current().params._id);
-          // var idDeelnemer = Deelnemers.findOne({'spelernaam': Session.get('spelernaam'), 'spelcode': Router.current().params._id}, {fields: {'_id':1}})._id;
+          // console.log(Session.get('spelernaam'), Router.current().params._id);
           Meteor.call('updateAccelero', Session.get('spelerid'), acceleray); 
+
+          // if totale movement is groter dan 30
+          if(sum > 30){
+            Meteor.call('givePoints', idDeelnemer);
+          }
+
         }else{
           console.log('Geen speler gevonden. Er mist een sessie of een spelcode')
         }
@@ -224,13 +238,7 @@ if (window.DeviceOrientationEvent) {
   }
 
 
-
-
-
-
-
 // Leave game function
-
 Meteor.startup(function(){
     $(window).bind('beforeunload', function() {
         // closingWindow();

@@ -7,11 +7,31 @@
         x: 0,
         y: 0,
         z: 0,
-        accelero:0
+        accelero:0,
+        points:0
 
       });
 
       return id; //[BUG!]
+    },
+    givePoints: function(userId, currentPoints){
+      var currentPoints = Deelnemers.findOne(userId).points;
+
+      Deelnemers.update(userId, {$set: {
+        points:currentPoints+1
+        }
+      });
+
+
+    },    
+    clearPoints: function(userId){ 
+
+      Deelnemers.update(userId, {$set: {
+        points:0
+        }
+      });
+
+
     },
     removePlayer:function(userId){
 

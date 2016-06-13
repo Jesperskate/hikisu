@@ -15,14 +15,16 @@
     </div>    
     <div class="actbox " >
       {{#each deelnemers}}
-        <div id="speler{{@index}}" class="col-sm-4 actcard {{displayName y }}" style="border:3px solid RGB({{x}},{{y}},{{z}}); " >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} | {{displayName y }}
+        <div id="speler{{@index}}" class="col-sm-4 actcard {{displayName y }}" style="border:3px solid RGB({{x}},{{y}},{{z}}); " >{{spelernaam}} | x:{{x}} | y:{{y}} | z:{{z}} | accelero: {{accelero}} | {{displayName y }} 
 
-          <span id="removePlayer">X</span></div>  
+          <span id="removePlayer">X</span>
+          <div class="score" style="width: {{displayScore points }};">{{points}}</div>
+        </div>  
         {{else}} 
           {{#if currentCod}}
-           <div class="col-sm-4 center-text" >Geen deelnemers in het spel</div>
+           <div class="col-sm-12 center-text" >Geen deelnemers in het spel</div>
           {{ else }}  
-          <div class="col-sm-4 center-text" >Start een nieuw spel of neem deel aan een spel.</div>
+          <div class="col-sm-12 center-text" >Start een nieuw spel of neem deel aan een spel.</div>
           {{/if }}    
       {{/each}} 
     </div>
