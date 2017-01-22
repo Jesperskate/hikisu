@@ -17,7 +17,6 @@ Template.register.events({
     Template.register.rendered = function (){
           if(BrowserDetect.browser === "Explorer"){
                     alert('Explorer is not supported');
-
                     $('input').css('padding','0px !important');
                 }
     }

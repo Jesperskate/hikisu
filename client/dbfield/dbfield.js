@@ -17,8 +17,7 @@ Template.dbfield.events({
       Session.set('editing_field',null);
     }
   },
-      'click .comment-remove':function(evt,tmpl){
-
+  'click .comment-remove':function(evt,tmpl){
      if (! Meteor.userId()) {
       var message = "You have to <a href='/login'>login</a> to delete cards";
       FlashMessages.sendError(message);

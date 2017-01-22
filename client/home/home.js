@@ -236,7 +236,7 @@ Template.fielditem.events ({
     }
   }
   ,
-    'keyup .tablename-color':function(evt,tmpl){
+  'keyup .tablename-color':function(evt,tmpl){
 
           if (! Meteor.userId()) {
       var message = "You have to <a href='/login'>login</a> to edit cards";

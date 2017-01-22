@@ -18,19 +18,15 @@
   Template.game.events ({
     'click #newGameBtn': function(){
       Meteor.popUp("addGame");
-
     },  
     'click #newPlayerBtn': function(){
       Meteor.popUp("addPlayer");
-
     },    
     'click #removePlayer': function(){
       Meteor.call('removePlayer',this._id);
-
     },    
     'click #resetPlayer': function(){
       Meteor.call('clearPoints',this._id);
-
     },
     'click #removeAll': function(){
       var find = Deelnemers.find({spelcode: Router.current().params._id}, {_id:1}).fetch();
@@ -64,8 +60,6 @@ Template.addGame.events ({
          $('#spelnaam').css('border', '1px solid red'); 
         return false;
       }
-
-
         Spellen.insert({
           naam: spelnaam,
           speltype: typespel,
@@ -261,21 +255,5 @@ if (window.DeviceOrientationEvent) {
 
 // Leave game function
 Meteor.startup(function(){
-    $(window).bind('beforeunload', function() {
-        // closingWindow();
-        // var idDeelnemer = Deelnemers.findOne({spelernaam: Session.get('spelernaam'), spelcode: Router.current().params._id}, {fields: {'_id':1}})._id;
-              
-        //     console.log('-------------------------------------------'+Session.get('spelernaam')+'-----'+idDeelnemer);
-
-        //         Meteor.call('removePlayer', idDeelnemer);
-
-        // have to return null, unless you want a chrome popup alert
-        return null;
-        //return 'Are you sure you want to leave?';
-    });
+   
 });
-closingWindow = function(){
-    console.log('closingWindow');
-
-    // alert('bye');
-}

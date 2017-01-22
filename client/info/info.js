@@ -2,23 +2,15 @@
 
 if(Meteor.isClient){
 
-Template.info.events({
+	Template.info.events({
+		"click .interesse": function(){
+		 	$( ".target" ).toggle( "slow" );
+		}
+	});
 
-"click .interesse": function(){
-
-  $( ".target" ).toggle( "slow" );
-
-}
-
-});
-
-Template.info.onRendered(function () {
-
+	Template.info.onRendered(function () {
 	 $( "#content" ).css("height", "auto");
-});
-
-
-
+	});
 
 }
 

@@ -10,9 +10,9 @@ Template.position.events ({
       var message = "You can only edit your own cards";
       FlashMessages.sendError(message);
       throw new Meteor.Error("not-authorized");}
-    evt.stopPropagation();
-    evt.preventDefault();
-    Session.set('editing_tablename',this._id);
+      evt.stopPropagation();
+      evt.preventDefault();
+      Session.set('editing_tablename',this._id);
   },
   'click .addfield':function(evt,tmpl){
 
@@ -30,11 +30,10 @@ Template.position.events ({
       createdAt: new Date(),
       owner: Meteor.userId(),
       username: Meteor.user().emails[0].address
-
     });
   }
   ,
-    'click .vote':function(evt,tmpl){
+  'click .vote':function(evt,tmpl){
 
      if (! Meteor.userId()) {
       

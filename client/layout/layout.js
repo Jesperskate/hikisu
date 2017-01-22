@@ -35,29 +35,25 @@ if (Meteor.isClient) {
        else{
             return false;}
      },
-    // emailLinkedIn: function(){
-    //     return Meteor.user().profile.emailAddress;
-    // },
-    // profilePictureUrl: function() {
-    //     return Meteor.user().services.linkedin.pictureUrl;
-    // }
+
   });
 
   Template.layout.events({
     'click #togglebtn': function(){
-slideout.toggle();
+      slideout.toggle();
     },
 
-       'click .logout': function(event){
+    'click .logout': function(event){
         event.preventDefault();
         Meteor.logout();
+        Session.set('spelernaam', undefined);
+
+        console.log('remove this user: '+ Meteor.userId(),  Meteor.call('logoutPlayer', Meteor.userId()));
+        Meteor.call('logoutPlayer', Meteor.userId());
+     
         FlashMessages.sendSuccess("Tot ziens");
     }
-});
-
-
-
-
+  });
 }
 
 if (Meteor.isServer) {

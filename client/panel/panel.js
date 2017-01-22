@@ -21,17 +21,13 @@ if (Meteor.isClient) {
     },
     email: function() {return Meteor.user().emails[0].address}, 
     userId: function() {return Meteor.userId()}
-
-    
-
   });
 
 
   Template.panel.events({
     "submit .new-sessie": function (event) {
       // Prevent default browser form submit
-      event.preventDefault();
- 
+      event.preventDefault(); 
       // Get value from form element
       var text = event.target.text.value; 
       var lefttext = event.target.lefttext.value;
@@ -56,10 +52,11 @@ if (Meteor.isClient) {
       username: Meteor.user().username
     });
  
-      // Clear form
+    // Clear form
       event.target.text.value = "";
     },
-// Hide input fields per discussion or brainstorm
+
+    // Hide input fields per discussion or brainstorm
     "click .switch": function (){
     var z =$( ".switch input:checked" ).val();
     

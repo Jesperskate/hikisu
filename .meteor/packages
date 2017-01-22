@@ -40,3 +40,9 @@ standard-minifier-js
 
 u2622:persistent-session
 fortawesome:fontawesome
+d3
+ecmascript
+cfs:filesystem
+cfs:standard-packages
+
+msand:d3zoompanbrushchart
