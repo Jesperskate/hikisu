@@ -1,7 +1,8 @@
 
+// var canvas = [];
 var canvas;
-Session.set('color', 'black');
-Session.set('drawPopUp', false); //bug
+
+Session.set('moveAllowed', false);
 
 Deps.autorun( function () {
   Meteor.subscribe('points');
@@ -11,17 +12,34 @@ Meteor.startup( function() {
   Deps.autorun( function() {
     var data = Points.find({'noteID': $('#canvas').attr('class')}).fetch();
     if (canvas) {
-      console.log('is canvas now do canvas.draw(data)')
+      console.log('is canvas now do canvas.draw(data): '+data);
       canvas.draw(data);
     }
   });
 });
 
+Template.registerHelper('extendContext2', function(key, value) {
+  var result = _.clone(this);
+  result[key] = value;
+  return result;
+});
+
 Template.canvas.onRendered(function() {
-  console.log(document && document.getElementById("canvas"))
-  canvas = new Canvas();
-  var data = Points.find({'noteID': $('#canvas').attr('class')}).fetch();
-  canvas.draw(data);
+  console.log(document && document.getElementById("canvas"));
+    
+  var sessieCode = Router.current().params._id;
+  var countLogs = Logs.find({spelcode: sessieCode}).count();
+
+  console.log('refresh done man',sessieCode, countLogs);
+  //dit moet in een array om alle canvassen apart te laten werken
+
+  // for (var i = 0; i < countLogs; i++) {
+  //   canvas[i] = new Canvas();
+  //   canvas[i].draw();  
+  // };
+    canvas = new Canvas();
+    canvas.draw();  
+
 });
  
 Template.canvas.helpers({
@@ -36,6 +54,17 @@ Template.canvas.helpers({
   }
 });
 
+Template.note.helpers({
+    moveAllowed: function(){
+    if (Session.get('moveAllowed') ===  true) {
+      return 'moveOn';
+
+    }else{
+      return 'moveOff';
+    }
+  }
+
+})
 
 Template.note.events({
   'click .undoButton': function (event) {
@@ -46,37 +75,53 @@ Template.note.events({
     Meteor.call('deleteNote',this._id);
     canvas.clear();
 
+  },  
+  'click .moveButton': function (event) {
+    
+    if (Session.get('moveAllowed') === false) {
+      Session.set('moveAllowed', true);
+
+    }else{
+      Session.set('moveAllowed', false);
+    }
   },
   'click .drawPopUp': function(event){
 
-        console.log('id of note: '+ event.target.id);
+    console.log('id of note: '+ event.target.id);
 
-        Meteor.popUp("canvas");
-        $('#closeDrawPopUp').show();
+    var p = Logs.findOne({_id:event.target.id}).fileURL
 
-        $('#canvas').css('height','100%');
-        $('#canvas').css('width','100%');
-        console.log('css background img: '+$('#canvas').css('background-image'));
+    Meteor.popUp("canvas");
+    $('#closeDrawPopUp').show();
+
+    $('#canvas').css('height','100%');
+    $('#canvas').css('width','100%');
+    console.log('css background img: '+ p);
+      if (p === null) {
         $('#canvas').css('background-color','white');
-        $('#canvas').css('position','fixed');
+      }else{
+        $('#canvas').css('background','url('+p+')');
+        $('#canvas').css('background-repeat','no-repeat');
+        $('#canvas').css('background-position','center');
+        $('#canvas').css('background-color','white');
 
-        $('#canvas').attr('class', event.target.id);
+      }
+    $('#canvas').css('position','fixed');
+    $('#canvas').attr('class', event.target.id);
 
-        canvas.draw();
 
-        Session.set('drawPopUp', true);
-
- 
   },    
   'click .colorButton': function (event) {
       console.log('thisvalue'+event.target.value);
       Session.set('color', event.target.value);
   }
+  
 });
 
 
 Template.canvas.events({
   'mousedown': function (event) {
+    console.log('Test, show note number: '+ $(event.target).parent().attr('class') );// het werkt!
     Session.set('draw', true);
     var offset = $('#canvas').offset();
     currentLine = [];
@@ -108,7 +153,6 @@ Template.canvas.events({
   },  
   // for mobile
   'touchstart': function (event) {
-
     console.log('touchStart...'+ $('#canvas').attr('class'));
     Session.set('draw', true);
     var touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
@@ -145,19 +189,18 @@ Template.canvas.events({
 
   'click #closeDrawPopUp': function(event){
 
+
     $('#closeDrawPopUp').hide();
       Meteor.popDown('canvas');
-      canvas = new Canvas();
-      var data = Points.find({}).fetch();
-      canvas.draw(data);
+      console.log('this---> '+this);
+
+      canvas = new Canvas(); 
+      canvas.draw();
       canvas.clear();
-
-
-
+      
   }
 });
 
-//
 
 
 var currentLine = []
@@ -169,15 +212,14 @@ Canvas = function () {
   var height = '100%' ;
   var noteid = $('#canvas').attr('class');
 
-
   var createSvg = function() {
     svg = d3.select('#canvas').append('svg')
       .attr('width', width)
       .attr('height', height)
+      .attr('class', noteid)
     .append("g")
       .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
     .append("g");
-
   };
 
   if(!svg) createSvg();
@@ -190,9 +232,20 @@ Canvas = function () {
 
   var lastData;
 
-  self.draw = function(data) {
+  self.draw = function() {
 
     
+    var stroke = 'grey';
+    var data = Points.find({'noteID': noteid}).fetch();
+
+    if (Points.find({'noteID': noteid}).count() > 0) {
+      if (Points.findOne({'noteID': noteid, 'owner':Session.get('spelernaam')})=== undefined) {
+        var stroke = 'grey';  
+      }else{
+        var stroke = Points.findOne({'noteID': noteid, 'owner':Session.get('spelernaam')}).color;
+      }  
+    };
+
     if(typeof data === "undefined") {
       data = lastData;
     }
@@ -220,10 +273,8 @@ Canvas = function () {
           }
         })
         .attr('fill', 'transparent')
-        .attr('stroke', Session.get('color'))
+        .attr('stroke', stroke)
         .attr('noteid', noteid)
-    
-      
     }
 
   };
@@ -233,7 +284,15 @@ Canvas = function () {
   };
 
   function zoom() {
-    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    var a = Session.get('moveAllowed');
+    if(a === true){
+      // svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); with zoom
+      svg.attr("transform", "translate(" + d3.event.translate + ")");
+    }
+    else{ 
+      return false;
+    }
+    
   }
 
   function zoomed() {

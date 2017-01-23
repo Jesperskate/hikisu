@@ -12,6 +12,12 @@ Meteor.startup(function(){
 
 });
 
+Template.registerHelper('extendContext', function(key, value) {
+  var result = _.clone(this);
+  result[key] = value;
+  return result;
+});
+
   // timer funtion
   var clock = 0;
   var end = 100;
@@ -34,11 +40,19 @@ Meteor.startup(function(){
     });
   });
 
-  // dit is voor de scroll fix in de frontpage met slide out menu
   Template.board.onRendered(function () {
-     // $( "#content" ).css("height", "100%");
 
   });
+
+  Template.board.rendered = function(){
+        $(".deelnemerbox").popover({
+        html: true,
+        title: 'New Letter',
+        content: function() {
+            return 'xxx';
+        }
+    });
+  }
     
   Template.board.events ({
     'click #newBoardBtn': function(){
@@ -62,7 +76,11 @@ Meteor.startup(function(){
       for (var i = 0; i < find.length; i++) {
         Meteor.call('removePlayer',find[i]._id);
       };
+    },
+    'click .deelnemerbox': function(){
+      // sAlert.success('Your message'); cool
     }
+    
   });  
 
 // Overview Pop Up:
@@ -70,6 +88,10 @@ Template.overview.helpers ({
   totalLogs: function(){
     var sessieCode = Router.current().params._id;
     return Logs.find({spelcode: sessieCode}).count();
+  },
+  totalParticipants: function(){
+    var sessieCode = Router.current().params._id;
+    return Deelnemers.find({spelcode: sessieCode}).count();
   }
 
 });
@@ -148,7 +170,6 @@ Template.addNote.events ({
       else{ 
         var owner = Meteor.user().emails[0].address;
       } 
-
       // logs is collection of notes/items
       Logs.insert({
         content: noteTitle,
@@ -193,20 +214,33 @@ Template.addBoard.events ({
     
       event.target.spelnaam.value = "";
 
-      //  Add logged user to the new board, not working yet. It does insert in Deelnemer collection
-      // if(Meteor.userId()){
-      //   var x = Meteor.user().emails[0].address;
-      //   console.log('User is logged in ',x);
-      //   Meteor.call('addPlayer', x.slice(0,6), spelcode,
-      //     function(error, result){
-      //         if(error){
-      //             console.log(error);
-      //         } else {
-      //             console.log('Added deelnemer._id: '+result);
-      //             Session.setPersistent('spelerid', result);
-      //         }
-      //     }); 
-      // }
+       // Add logged user to the new board, not working yet. It does insert in Deelnemer collection
+      if(Meteor.userId()){
+        var x = Meteor.user().emails[0].address;
+        console.log('User is logged in as ',x);
+        Meteor.call('addPlayer', x.slice(0,6).toString(), spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added deelnemer._id: '+result);
+
+                  Session.setPersistent('spelerid', result);
+                  Session.setPersistent('spelernaam', x.slice(0,6).toString());
+              }
+          }); 
+      }else{
+        Meteor.call('addPlayer', 'Host', spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added deelnemer._id: '+result);
+                  Session.setPersistent('spelerid', result);
+                  Session.setPersistent('spelernaam', 'Host');
+              }
+          });
+      }
 
       Meteor.popDown('addBoard');
       Router.go('/b/'+spelcode);
@@ -221,9 +255,14 @@ Template.addParticipant.events ({
       var spelernaam = event.target.spelernaam.value;
       var spelcode = event.target.spelcode.value;
 
+      if (!spelernaam || spelernaam === undefined) {
+        console.log('Name is required');
+         $('#spelernaam').css('border', '2px solid red'); 
+        return false;
+      }     
       if (!spelcode || spelcode === undefined) {
         console.log('Code is required');
-         $('#spelcode').css('border', '1px solid red'); 
+         $('#spelcode').css('border', '2px solid red'); 
         return false;
       }
       var checkExist = Deelnemers.findOne({'spelernaam': spelernaam, 'spelcode': spelcode});
@@ -248,6 +287,14 @@ Template.addParticipant.events ({
        
         event.target.spelcode.value = ""; //clear input field
         Session.setPersistent("spelernaam", spelernaam);
+
+        var currentParticipants = Deelnemers.find({spelcode: spelcode.toString()}).count();
+        // selectColor by number 
+        Session.setPersistent('color', selectColor(currentParticipants));
+        
+        console.log('Color session set:'+ Session.get('color'));
+
+
         Meteor.popDown('addParticipant');
         Router.go('/b/'+spelcode);
         FlashMessages.sendSuccess("Adding participant done");
@@ -290,41 +337,8 @@ Template.board.helpers({
       return Deelnemers.find({spelcode: sessieCode});
     },
     color: function(index){
-
-      console.log('index of user is'+index)
-      switch(index) {
-          case 0:
-             var col ='#0051ba'; 
-             Session.set('color', col);
-              return col;
-              break;
-          case 1:
-             var col ='#c41e3a'; 
-             Session.set('color', col);
-              return col;
-              break;          
-          case 2:
-             var col ='#007a3d'; 
-             Session.set('color', col);
-              return col;
-              break;
-          case 3:
-             var col = '#2b2b28'; 
-             Session.set('color', col);
-              return col;
-              break;
-          case 4:
-             var col ='#fca311'; 
-             Session.set('color', col);
-              return col;
-              break;
-          default:
-             var col ='grey'; 
-             Session.set('color', col);
-              return col;
-
-      } 
-
+      console.log('index of user is '+index);
+      return selectColor(index);
     },
     displayBox: function(input) {
           return 'show';
@@ -336,48 +350,55 @@ Template.board.helpers({
           return '100%';
         }
       }
+
   });
 
-
-// alle bewegings detectie code
-if (window.DeviceOrientationEvent) {
-
-   window.addEventListener("deviceorientation", function(event) {
-    // handmatige check of deviceorientation mogelijk is:
-    if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
-    
-       // console.log(event.alpha, event.beta, event.gamma);
-
-       var idDeelnemer = Session.get('spelerid');
-       var idFocus = '#'+Meteor.userId();
-       var x = event.beta.toFixed(0); // geen decimalen
-       var y = event.gamma.toFixed(0);
-       var z = event.alpha.toFixed(0);
-
-        // if beta / alfa / gamma > 30 set color to..
-        if (event.alpha > 30 && event.alpha < 90) {
-          console.log('alpha is groter dan 30');
-           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-           // Meteor.call('givePoints', idDeelnemer);
-        };      
-        if (event.beta > 30) {
-          console.log('beta is groter dan 30');
-          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-        };      
-        if (event.gamma >= 80) {
-          console.log('gamma is groter dan 80');
-          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-          // Meteor.call('clearPoints', idDeelnemer);
-        };
-      } else{
-        return false;
-      }
-    }, true);
-    
-  }
-  if (!window.DeviceOrientationEvent) {
-       console.log('deviceorientation not supported in this browser')
-  }
-
+selectColor = function (input) {
+   switch(input) {
+          case 0:
+             var col ='#0051ba'; 
+             return col;
+              break;
+          case 1:
+             var col ='#c41e3a'; 
+             return col;
+              break;          
+          case 2:
+             var col ='#007a3d'; 
+             return col;
+              break;
+          case 3:
+             var col = '#2b2b28'; 
+             return col;
+              break;
+          case 4:
+             var col ='#fca311'; 
+             return col;
+              break;          
+          case 5:
+             var col ='#0051ba'; 
+             return col;
+              break;
+          case 6:
+             var col ='#c41e3a'; 
+             return col;
+              break;          
+          case 7:
+             var col ='#007a3d'; 
+             return col;
+              break;
+          case 8:
+             var col = '#2b2b28'; 
+             return col;
+              break;
+          case 9:
+             var col ='#fca311'; 
+             return col;
+              break;
+          default:
+             var col ='grey'; 
+             return col;
+      }  
+    }
 
 

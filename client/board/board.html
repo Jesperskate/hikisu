@@ -46,19 +46,22 @@
       </div>
       <div class="col-sm-10">
         {{#each logs}}
-
-          {{> note }}
+          <!-- <span id="noteidtransfer" class="{{@index}}">{{@index}}</span> -->
+          {{> note extendContext 'index' @index}}
         {{/each }}  
       </div>
       <div class="col-sm-1 side">
         {{#if currentCod}}
         <div class="side-text" >Participants:</div>
             {{#each deelnemers}}
-            <div class="deelnemerbox" id="speler{{@index}}" >
-              <div id="deelnemer-screen"  style="border:3px solid {{color @index}}" ></div>
-              <span id="deelnemer-naam">{{spelernaam}}</span>            
+            <div class="deelnemerbox" id="speler{{@index}}" title="Header" data-toggle="popover" data-placement="left" data-content="Content">
+             
+                <div id="deelnemer-screen"  style="border:3px solid {{color @index}}" ></div>
+                <span id="deelnemer-naam">{{spelernaam}}</span> 
+
             </div>        
-          {{/each}} 
+          {{/each}}
+           <!-- <a href="#" title="Header" data-toggle="popover" data-content="Some content">Click Me</a><br>  -->
         {{/if }}
       </div>
 
@@ -178,7 +181,7 @@
         <div class="modal-body">
           <div class="">
             <div class="col-sm-6">Total slides: {{totalLogs}}</div>
-            <div class="col-sm-6">Total participants: {{totalLogs}}</div>
+            <div class="col-sm-6">Total participants: {{totalParticipants}}</div>
 
           </div>
           

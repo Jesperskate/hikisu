@@ -7,7 +7,7 @@ Router.configure({
 Router.map(function(){
 	this.route('home',{path:'/home'})
 	this.route('help',{path:'/help'})
-	this.route('info',{path:'/'})
+	this.route('infotrigger',{path:'/'})
 	this.route('login',{path:'/login'})
 	this.route('register',{path:'/register'})
 	this.route('panel',{path:'/panel'})

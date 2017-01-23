@@ -39,7 +39,6 @@ check@1.2.1
 chriswessels:slideout@0.1.9_2
 coffeescript@1.0.17
 d3@1.0.0
-d3js:d3@3.5.8
 ddp@1.2.5
 ddp-client@1.2.7
 ddp-common@1.2.5
@@ -72,6 +71,7 @@ iron:url@1.0.11
 jeremy:snapsvg@0.4.1_2
 johnantoni:meteor-appear@0.0.2
 jquery@1.11.8
+juliancwirko:s-alert@3.2.0
 launch-screen@1.0.11
 less@2.6.0
 livedata@1.0.18
@@ -79,6 +79,9 @@ localstorage@1.0.9
 logging@1.0.12
 matb33:bootstrap-base@10.0.0
 matb33:bootstrap-glyphicons@10.0.0
+matb33:bootstrap-popovers@10.0.0
+matb33:bootstrap-tooltip@10.0.0
+matb33:bootstrap-transition-js@10.0.0
 meteor@1.1.14
 meteor-base@1.0.4
 meteor-platform@1.2.6
@@ -95,7 +98,6 @@ mongo@1.1.7
 mongo-id@1.0.4
 mongo-livedata@1.0.12
 mrt:flash-messages@1.0.1
-msand:d3zoompanbrushchart@1.0.2
 npm-bcrypt@0.8.5
 npm-mongo@1.4.43
 oauth@1.1.10
