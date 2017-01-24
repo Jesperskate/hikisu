@@ -7,22 +7,30 @@
 		<div class="span12 adifont buttonBar" id="{{index}}" >
 			<div class='deleteNote canvasBtn' data-noteid="{{index}}" title="delete this note"><i class="fa fa-trash" aria-hidden="true"></i></div>
 			<div class='undoButton canvasBtn' data-noteid="{{index}}" title="Undo drawing"><i class="fa fa-undo" aria-hidden="true"></i></div>				
-<!-- 			<div class='moveButton canvasBtn {{moveAllowed}}' data-noteid="{{index}}" title="Move drawing"><i class="fa fa-arrows" aria-hidden="true"></i></div>		
-			<div class="drawPopUp canvasBtn" title="Draw on mobile device" data-noteid="{{index}}" type='button' id='{{_id}}'><i class="fa fa-mobile-phone" id='{{_id}}' aria-hidden="true" style="font-size: 22px;"></i></div> -->
+			<div class='moveButton canvasBtn {{moveAllowed}}' data-noteid="{{index}}" title="Move drawing"><i class="fa fa-arrows" aria-hidden="true"></i></div>		
+			<div class="drawPopUp canvasBtn" title="Draw on mobile device" data-noteid="{{index}}" type='button' id='{{_id}}'><i class="fa fa-mobile-phone" id='{{_id}}' aria-hidden="true" style="font-size: 22px;"></i></div>
 		</div>
 		<!-- {{> canvas extendContext2 'index2' index}} -->
 
-	<div id='canvas{{index}}' class="{{_id}}" data-noteid="{{index}}" style="height:{{height}}px; width:100%; border:1px solid; background-image:URL('{{fileURL}}');
+	<div id='canvas' class="{{_id}}" data-noteid="{{index}}" style="height:{{height}}px; width:100%; border:1px solid; background-image:URL('{{fileURL}}');
 	background-repeat: no-repeat;background-position: center; margin-left: auto;
 margin-right: auto;"></div>
 	<!-- close button when full mobile screen -->
 	<div id="closeDrawPopUp">close</div>
 
-		<!-- Einde maandag 23 januari, hier verder met het bouwen van de array met canvassen -->
+
+		{{> canvas }}
+
 	</div>
 </template>
 
 
 <template name="canvas" >
+
+<!-- 	<div id='canvas' class="{{_id}}" style="height:{{height}}px; width:100%; border:1px solid; background-image:URL('{{fileURL}}');
+	background-repeat: no-repeat;background-position: center; margin-left: auto;
+margin-right: auto;"></div>
+	close button when full mobile screen -->
+	<!-- <div id="closeDrawPopUp">close</div>  -->
 
 </template>

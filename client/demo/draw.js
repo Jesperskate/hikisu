@@ -1,5 +1,5 @@
 
-var canvas = [];
+var canvas;
 
 Session.set('moveAllowed', false);
 
@@ -9,17 +9,13 @@ Deps.autorun( function () {
 
 Meteor.startup( function() {
   Deps.autorun( function() {
-   //  for (var i = 0; i <= 12; i++) {
-
-    //   if (canvas[i]) {
-    //     console.log('is canvas now do canvas.draw(data): ');
-    //     canvas[i].draw();
-
-    //   }
-    // };
+    var data = Points.find({}).fetch();
+    if (canvas) {
+      console.log('is canvas now do canvas.draw(data): '+data);
+      canvas.draw(data);
+    }
   });
 });
-
 
 Template.note.onRendered(function() {
   console.log(document && document.getElementById("canvas"));
@@ -27,16 +23,10 @@ Template.note.onRendered(function() {
   var sessieCode = Router.current().params._id;
   var countLogs = Logs.find({spelcode: sessieCode}).count();
 
-  console.log('refresh done man ',sessieCode, 'aantal notes: ',countLogs);
+  console.log('refresh done man',sessieCode, countLogs);
   //dit moet in een array om alle canvassen apart te laten werken
-
-  for (var i = 0; i < countLogs; i++) {
-    canvas[i] = new Canvas();
-    console.log('canvas['+i+'] here: '+canvas[i]);
-    canvas[i].draw(i);  
-  };
-  
-  console.log(canvas);
+  canvas = new Canvas();
+  canvas.draw();  
 
 });
  
@@ -67,15 +57,15 @@ Template.note.helpers({
 
 Template.note.events({
   'click .undoButton': function (event) {
-      canvas[$(event.target).attr('data-noteid')].clear();
+      canvas.clear();
 
   },      
   'click .deleteNote': function () {
     Meteor.call('deleteNote',this._id);
-    canvas[$(event.target).attr('data-noteid')].clear();
+    canvas.clear();
 
   },  
-  'click .moveButton': function (event) {
+  'click .moveButton': function () {
     if (Session.get('moveAllowed') === false) {
       Session.set('moveAllowed', true);
 
@@ -83,45 +73,39 @@ Template.note.events({
       Session.set('moveAllowed', false);
     }
   },
-  // 'click .drawPopUp': function(event){
+  'click .drawPopUp': function(event){
 
-  //   console.log('id of note: '+ event.target.id+ 'noteid:'+$(event.target).attr('data-noteid'));
+    console.log('id of note: '+ event.target.id);
 
-  //   var p = Logs.findOne({_id:event.target.id}).fileURL
-  //   var canvasid = '#canvas'+$(event.target).attr('data-noteid');
+    var p = Logs.findOne({_id:event.target.id}).fileURL
 
-  //   console.log('canvasid: '+canvasid);
+    Meteor.popUp("canvas");
+    $('#closeDrawPopUp').show();
 
-  //   Meteor.popUp("canvas");
-  //   $('#closeDrawPopUp').show();
+    $('#canvas').css('height','100%');
+    $('#canvas').css('width','100%');
+    console.log('css background img: '+ p);
+      if (p === null) {
+        $('#canvas').css('background-color','white');
+      }else{
+        $('#canvas').css('background','url('+p+')');
+        $('#canvas').css('background-repeat','no-repeat');
+        $('#canvas').css('background-position','center');
+        $('#canvas').css('background-color','white');
 
-  //   $(canvasid).css('height','100%');
-  //   $(canvasid).css('width','100%');
-  //   console.log('css background img: '+ p);
-  //     if (p === null) {
-  //       $(canvasid).css('background-color','white');
-  //     }else{
-  //       $(canvasid).css('background','url('+p+')');
-  //       $(canvasid).css('background-repeat','no-repeat');
-  //       $(canvasid).css('background-position','center');
-  //       $(canvasid).css('background-color','white');
-
-  //     }
-  //   $(canvasid).css('position','fixed');
-  //   $(canvasid).attr('class', event.target.id);
+      }
+    $('#canvas').css('position','fixed');
+    $('#canvas').attr('class', event.target.id);
 
 
-  // },    
+  },    
   'click .colorButton': function (event) {
       console.log('thisvalue'+event.target.value);
       Session.set('color', event.target.value);
   },
   'mousedown': function (event) {
-    console.log('Test, show note number: '+ $(event.target).attr('class') );// het werkt!
-    console.log('Test, show note number: '+ $(event.target).attr('data-noteid') );// het werkt!
     Session.set('draw', true);
-    var offset = $(event.target).offset();
-    console.log('offset'+offset.left)
+    var offset = $('#canvas').offset();
     currentLine = [];
     currentLine.push({
       x: (event.pageX - offset.left),
@@ -141,14 +125,12 @@ Template.note.events({
 
   'mousemove': function (event) {
     if (Session.get('draw')) {
-      var offset = $(event.target).offset();
+      var offset = $('#canvas').offset();
       currentLine.push({
         x: (event.pageX - offset.left),
         y: (event.pageY - offset.top)
       });
-      var x = $(event.target).attr('data-noteid');
-      console.log('x '+x)
-      canvas[x].draw();
+      canvas.draw();
     }
   },  
   // for mobile
@@ -156,7 +138,7 @@ Template.note.events({
     console.log('touchStart...'+ $('#canvas').attr('class'));
     Session.set('draw', true);
     var touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
-    var offset = $(event.target).offset();
+    var offset = $('#canvas').offset();
     currentLine = [];
     currentLine.push({
       x: (touch.pageX - offset.left),
@@ -183,18 +165,20 @@ Template.note.events({
         x: (touch.pageX - offset.left),
         y: (touch.pageY - offset.top)
       });
-      canvas[$(event.target).attr('data-noteid')].draw();
+      canvas.draw();
     }
   },
 
   'click #closeDrawPopUp': function(event){
+
+
     $('#closeDrawPopUp').hide();
       Meteor.popDown('canvas');
+      console.log('this---> '+this);
 
-      canvas[$(event.target).attr('data-noteid')] = new Canvas(); 
-      canvas[$(event.target).attr('data-noteid')].draw();
-      canvas[$(event.target).attr('data-noteid')].clear();
-
+      canvas = new Canvas(); 
+      canvas.draw();
+      canvas.clear();
       
   }
 });
@@ -203,21 +187,18 @@ Template.note.events({
 
 var currentLine = []
 
-Canvas = function (i) {
+Canvas = function () {
   var self = this;
   var svg;
   var width = '100%' ;
   var height = '100%' ;
-  var canvasid = '#canvas'+i;
-  var noteid = $(canvasid).attr('class');
-  var id = $(canvasid).parent().attr('data-noteid');
+  var noteid = $('#canvas').attr('class');
 
   var createSvg = function() {
-    svg = d3.select(canvasid).append('svg')
+    svg = d3.select('#canvas').append('svg')
       .attr('width', width)
       .attr('height', height)
       .attr('class', noteid)
-      .attr('id', id)
     .append("g")
       .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
     .append("g");

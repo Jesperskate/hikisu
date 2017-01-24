@@ -45,5 +45,4 @@ ecmascript
 cfs:filesystem
 cfs:standard-packages
 
-juliancwirko:s-alert
-matb33:bootstrap-popovers
+msand:d3zoompanbrushchart

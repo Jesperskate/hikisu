@@ -5,7 +5,7 @@
     addPlayer: function(userName, spelcode){
       var id = Deelnemers.insert({
         spelernaam: userName,
-        spelcode: spelcode.toString(),
+        spelcode: spelcode,
         createdAt: new Date(), // current time
         x: 0,
         y: 0,

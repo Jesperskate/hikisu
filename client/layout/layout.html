@@ -23,7 +23,7 @@
           <div class='bars'></div>
         </div>
           
-<!--   <div class="logo">
+<!--         <div class="logo">
           <div class="upper layer"><div class="line"></div>  <div class="line2"></div></div>
           <div class="middle layer text">HIKISU</div>
           <div class="bottom layer">
@@ -37,13 +37,13 @@
     <ul id="menu-list">
       <!-- <a id="newSession" href="{{pathFor 'panel'}}"><li> Panel</li></a> -->
       <!-- <a id="newSession" href="{{pathFor 'game'}}"><li> Game</li></a> -->
-    	<a id="newSession" href="{{pathFor 'board'}}"><li class="adifont-thick"> Board</li></a>
-      <a  id="newSession" href="{{pathFor 'help'}}"><li class="adifont-thick"> Help</li></a>    	
+    	<a id="newSession" href="{{pathFor 'board'}}"><li> Board</li></a>
+      <a  id="newSession" href="{{pathFor 'help'}}"><li> Help</li></a>    	
     	   {{#if currentUser}}
          <hr>
          <!-- <div id="MenuDiv"><img src="{{profilePictureUrl}}" /></div> -->
          <li><span id="usermenu-email">{{email}}{{emailLinkedIn}}</span></li>
-       <a id="newSession" href="#" class="logout"><li class="adifont-thick">Log uit</li></a>
+       <a id="newSession" href="#" class="logout"><li>Log uit</li></a>
     {{else}}
         <div class="btns-group">
           <a href="{{pathFor 'login'}}" class="btn-secondary"><div id="btndiv">Log in</div></a>
@@ -54,7 +54,6 @@
   </div>
 
     <div id="content" class="panel slideout-panel slideout-panel-left">
-      {{> sAlert}}
       <span id="togglebtn" title="Open menu">☰</span>
       <!-- If editing session werkt niet juist -->
       {{#if editing_session }} 
