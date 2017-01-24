@@ -37,13 +37,13 @@
     <ul id="menu-list">
       <!-- <a id="newSession" href="{{pathFor 'panel'}}"><li> Panel</li></a> -->
       <!-- <a id="newSession" href="{{pathFor 'game'}}"><li> Game</li></a> -->
-    	<a id="newSession" href="{{pathFor 'board'}}"><li> Board</li></a>
-      <a  id="newSession" href="{{pathFor 'help'}}"><li> Help</li></a>    	
+    	<a id="newSession" href="{{pathFor 'board'}}"><li class="adifont-thick"> Board</li></a>
+      <a  id="newSession" href="{{pathFor 'help'}}"><li class="adifont-thick"> Help</li></a>    	
     	   {{#if currentUser}}
          <hr>
          <!-- <div id="MenuDiv"><img src="{{profilePictureUrl}}" /></div> -->
-         <li><span id="usermenu-email">{{email}}{{emailLinkedIn}}</span></li>
-       <a id="newSession" href="#" class="logout"><li>Log uit</li></a>
+         <li class="adifont-thick"><span id="usermenu-email">{{email}}{{emailLinkedIn}}</span></li>
+       <a id="newSession" href="#" class="logout"><li class="adifont-thick">Log uit</li></a>
     {{else}}
         <div class="btns-group">
           <a href="{{pathFor 'login'}}" class="btn-secondary"><div id="btndiv">Log in</div></a>
@@ -66,9 +66,6 @@
 
   
   <script type="text/javascript">
-
-
-
 var _urq = _urq || [];
 _urq.push(['initSite', '5e56595f-76ff-4406-87b6-41c563b6dc78']);
 (function() {

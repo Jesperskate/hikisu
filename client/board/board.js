@@ -66,11 +66,18 @@ Template.registerHelper('extendContext', function(key, value) {
     },    
     'click #removeAll': function(){
       var find = Deelnemers.find({spelcode: Router.current().params._id}, {_id:1}).fetch();
-      console.log(find[0]._id);
+      if (find.length === 0) {
+        console.log('No players to remove from session.');
+      };
       for (var i = 0; i < find.length; i++) {
         Meteor.call('removePlayer',find[i]._id);
-      };
-    }
+        console.log('Player '+i+' deleted.');
+      };   
+    },
+    'click #removeAllPoints': function () {
+      Meteor.call('removeAllPoints');
+      console.log('All points deleted: '+ Meteor.call('removeAllPoints'));
+    }, 
   });  
 
 // Overview Pop Up:
@@ -201,20 +208,37 @@ Template.addBoard.events ({
     
       event.target.spelnaam.value = "";
 
-      //  Add logged user to the new board, not working yet. It does insert in Deelnemer collection
-      // if(Meteor.userId()){
-      //   var x = Meteor.user().emails[0].address;
-      //   console.log('User is logged in ',x);
-      //   Meteor.call('addPlayer', x.slice(0,6), spelcode,
-      //     function(error, result){
-      //         if(error){
-      //             console.log(error);
-      //         } else {
-      //             console.log('Added deelnemer._id: '+result);
-      //             Session.setPersistent('spelerid', result);
-      //         }
-      //     }); 
-      // }
+       // Add logged user to the new board, not working yet. It does insert in Deelnemer collection
+      if(Meteor.userId()){
+        var x = Meteor.user().emails[0].address;
+        console.log('User is logged in as ',x);
+        Meteor.call('addParticipant', x.slice(0,6), spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added deelnemer._id: '+result);
+
+                  Session.setPersistent('spelerid', result);
+                  var sc =Deelnemers.findOne({_id: result}).spelercolor;
+                  Session.setPersistent('color', sc);
+                  Session.setPersistent('spelernaam', x.slice(0,6));
+              }
+          }); 
+      }else{
+        Meteor.call('addParticipant', 'Host', spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added deelnemer._id: '+result);
+                  Session.setPersistent('spelerid', result);
+                  var sc =Deelnemers.findOne({_id: result}).spelercolor;
+                  Session.setPersistent('color', sc);
+                  Session.setPersistent('spelernaam', 'Host');
+              }
+          });
+      }
 
       Meteor.popDown('addBoard');
       Router.go('/b/'+spelcode);
@@ -238,18 +262,20 @@ Template.addParticipant.events ({
 
       if (checkExist) {
           FlashMessages.sendSuccess('You are already in the meeting ');
-          Meteor.popDown('addPlayer');
+          Meteor.popDown('addParticipant');
           Router.go('/b/'+spelcode);
           return false;
       }
       else {
-        Meteor.call('addPlayer', spelernaam, spelcode,
+        Meteor.call('addParticipant', spelernaam, spelcode,
           function(error, result){
               if(error){
                   console.log(error);
               } else {
-                  console.log('Added deelnemer._id: '+result);
+
                   Session.setPersistent('spelerid', result);
+                  var sc =Deelnemers.findOne({_id: result}).spelercolor;
+                  Session.setPersistent('color', sc);
               }
           });        
       }
@@ -271,7 +297,6 @@ Template.addPlayer.helpers({
       return false;
     }
   }
-
 });
 
 //Load collections into discuss template
@@ -294,12 +319,11 @@ Template.board.helpers({
     },
     deelnemers: function() {
       var sessieCode = Router.current().params._id;
-      // get all positions with sessieID
       return Deelnemers.find({spelcode: sessieCode});
     },
     color: function(index){
 
-      console.log('index of user is'+index)
+      console.log('index of user is '+index)
       switch(index) {
           case 0:
              var col ='#0051ba'; 
@@ -317,7 +341,7 @@ Template.board.helpers({
               return col;
               break;
           case 3:
-             var col = '#2b2b28'; 
+             var col ='#2b2b28'; 
              Session.set('color', col);
               return col;
               break;
@@ -347,45 +371,6 @@ Template.board.helpers({
   });
 
 
-// alle bewegings detectie code
-if (window.DeviceOrientationEvent) {
-
-   window.addEventListener("deviceorientation", function(event) {
-    // handmatige check of deviceorientation mogelijk is:
-    if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
-    
-       // console.log(event.alpha, event.beta, event.gamma);
-
-       var idDeelnemer = Session.get('spelerid');
-       var idFocus = '#'+Meteor.userId();
-       var x = event.beta.toFixed(0); // geen decimalen
-       var y = event.gamma.toFixed(0);
-       var z = event.alpha.toFixed(0);
-
-        // if beta / alfa / gamma > 30 set color to..
-        if (event.alpha > 30 && event.alpha < 90) {
-          console.log('alpha is groter dan 30');
-           Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-           // Meteor.call('givePoints', idDeelnemer);
-        };      
-        if (event.beta > 30) {
-          console.log('beta is groter dan 30');
-          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-        };      
-        if (event.gamma >= 80) {
-          console.log('gamma is groter dan 80');
-          Meteor.call('updateGyro', idDeelnemer , x, y, z); 
-          // Meteor.call('clearPoints', idDeelnemer);
-        };
-      } else{
-        return false;
-      }
-    }, true);
-    
-  }
-  if (!window.DeviceOrientationEvent) {
-       console.log('deviceorientation not supported in this browser')
-  }
 
 
 

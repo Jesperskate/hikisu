@@ -18,9 +18,10 @@
 
           <div class="col-sm-1 button1" id="overviewBoard" ><i class="fa fa-pie-chart" title="end meeting" aria-hidden="true"></i></div>
         </div>
-       <!--  {{#if currentUser}}
+        {{#if currentUser}}
           <span id="removeAll"><i class="fa fa-trash " title="remove all players" aria-hidden="true"></i></span>
-        {{/if}} -->
+          <span id="removeAllPoints">Remove all points</span>
+        {{/if}}
           
       {{ else }}
         <button id="newBoardBtn" class="btn btn-default">New Board</button>
@@ -55,7 +56,7 @@
         <div class="side-text" >Participants:</div>
             {{#each deelnemers}}
             <div class="deelnemerbox" id="speler{{@index}}" >
-              <div id="deelnemer-screen"  style="border:3px solid {{color @index}}" ></div>
+              <div id="deelnemer-screen"  style="border:3px solid {{spelercolor}}" ></div>
               <span id="deelnemer-naam">{{spelernaam}}</span>            
             </div>        
           {{/each}} 

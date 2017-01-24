@@ -1,6 +1,7 @@
 
 var canvas;
 
+
 Session.set('moveAllowed', false);
 
 Deps.autorun( function () {
@@ -12,10 +13,15 @@ Meteor.startup( function() {
     var data = Points.find({}).fetch();
     if (canvas) {
       console.log('is canvas now do canvas.draw(data): '+data);
-      canvas.draw(data);
+        canvas.draw(data);
+        // var sessieCode = Router.current().params._id;
+        // var countLogs = Logs.find({spelcode: sessieCode}).count();
+        // console.log('DEP AUTORUN',sessieCode, countLogs);
     }
   });
 });
+
+
 
 Template.note.onRendered(function() {
   console.log(document && document.getElementById("canvas"));
@@ -31,7 +37,14 @@ Template.note.onRendered(function() {
 });
  
 Template.canvas.helpers({
-
+  height: function(){
+    var h = $(window).height();
+    var w = $(window).width();
+    if(w <= h){
+      return w - 30;
+    } 
+    return h - 150; 
+  }
 });
 
 Template.note.helpers({
@@ -42,67 +55,49 @@ Template.note.helpers({
     }else{
       return 'moveOff';
     }
-  },
-  height: function(){
-    var h = $(window).height();
-    var w = $(window).width();
-
-    if(w <= h){
-      return w - 30;
-    } 
-    return h - 150; 
   }
-
 })
 
 Template.note.events({
   'click .undoButton': function (event) {
-      canvas.clear();
-
-  },      
+    canvas.clear();
+  },          
   'click .deleteNote': function () {
     Meteor.call('deleteNote',this._id);
     canvas.clear();
-
   },  
   'click .moveButton': function () {
     if (Session.get('moveAllowed') === false) {
       Session.set('moveAllowed', true);
-
     }else{
       Session.set('moveAllowed', false);
     }
   },
   'click .drawPopUp': function(event){
+    console.log('id of this element (noteID): '+ event.target.id);
+    var c0 = '.'+event.target.id;
+    var c1 = '.'+event.target.id+'-svg';
+    var p = Logs.findOne({_id:event.target.id}).fileURL;
 
-    console.log('id of note: '+ event.target.id);
+    $('.closeDrawPopUp').show();
+    $('.drawPopUp').hide();
+    
 
-    var p = Logs.findOne({_id:event.target.id}).fileURL
+    $(c0).addClass('mobileFull');
+  },
+  'click .closeDrawPopUp': function(event){
+    $('#canvas').removeClass('mobileFull');
+    $('.closeDrawPopUp').hide();
+    $('.drawPopUp').show();
 
-    Meteor.popUp("canvas");
-    $('#closeDrawPopUp').show();
-
-    $('#canvas').css('height','100%');
-    $('#canvas').css('width','100%');
-    console.log('css background img: '+ p);
-      if (p === null) {
-        $('#canvas').css('background-color','white');
-      }else{
-        $('#canvas').css('background','url('+p+')');
-        $('#canvas').css('background-repeat','no-repeat');
-        $('#canvas').css('background-position','center');
-        $('#canvas').css('background-color','white');
-
-      }
-    $('#canvas').css('position','fixed');
-    $('#canvas').attr('class', event.target.id);
-
-
-  },    
+  },   
   'click .colorButton': function (event) {
       console.log('thisvalue'+event.target.value);
       Session.set('color', event.target.value);
-  },
+  }
+});
+
+Template.canvas.events({
   'mousedown': function (event) {
     Session.set('draw', true);
     var offset = $('#canvas').offset();
@@ -167,20 +162,8 @@ Template.note.events({
       });
       canvas.draw();
     }
-  },
-
-  'click #closeDrawPopUp': function(event){
-
-
-    $('#closeDrawPopUp').hide();
-      Meteor.popDown('canvas');
-      console.log('this---> '+this);
-
-      canvas = new Canvas(); 
-      canvas.draw();
-      canvas.clear();
-      
   }
+
 });
 
 
@@ -193,6 +176,7 @@ Canvas = function () {
   var width = '100%' ;
   var height = '100%' ;
   var noteid = $('#canvas').attr('class');
+  var noteidsvg = $('#canvas').attr('class')+'-svg';
 
   var createSvg = function() {
     svg = d3.select('#canvas').append('svg')
@@ -204,34 +188,29 @@ Canvas = function () {
     .append("g");
   };
 
+  console.log('SVG '+!svg)
+
   if(!svg) createSvg();
 
   self.clear = function() {
+    console.log('noteid in self clear '+noteid);
+    Meteor.call('undoPoints', noteid);
     d3.select('svg').remove();
-    Meteor.call('undoPoints', noteid)
     createSvg();
   };
 
   var lastData;
 
-  self.draw = function() {
-
-    
-    var stroke = 'grey';
-    var data = Points.find({'noteID': noteid}).fetch();
-
-    if (Points.find({'noteID': noteid}).count() > 0) {
-      if (Points.findOne({'noteID': noteid, 'owner':Session.get('spelernaam')})=== undefined) {
-        var stroke = 'grey';  
-      }else{
-        var stroke = Points.findOne({'noteID': noteid, 'owner':Session.get('spelernaam')}).color;
-      }  
-    };
+  self.draw = function(data) {
 
     if(typeof data === "undefined") {
       data = lastData;
     }
     lastData = data;
+
+    if (data === undefined) {
+      return false;
+    };
 
     var renderData = data;
     if(currentLine.length) {
@@ -255,7 +234,14 @@ Canvas = function () {
           }
         })
         .attr('fill', 'transparent')
-        .attr('stroke', stroke)
+        .attr('stroke', function (line) {
+          if (line.color === undefined) { 
+            return 'grey';
+          }
+          else{
+            return line.color; 
+          };               
+        })
         .attr('noteid', noteid)
     }
 

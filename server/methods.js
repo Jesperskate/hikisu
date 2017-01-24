@@ -5,7 +5,7 @@
     addPlayer: function(userName, spelcode){
       var id = Deelnemers.insert({
         spelernaam: userName,
-        spelcode: spelcode,
+        spelcode: spelcode.toString(),
         createdAt: new Date(), // current time
         x: 0,
         y: 0,
@@ -13,6 +13,24 @@
         accelero:0,
         points:0
       });
+      return id; //[BUG!]
+    },    
+    addParticipant: function(userName, spelcode){
+
+      var carray = ['#0051ba','#c41e3a','#007a3d','#2b2b28','#fca311'];
+      var guess = Math.floor((Math.random() * 4) ); 
+      
+      var c = carray[guess];
+
+      console.log('random color for new participant: '+c);
+
+      var id = Deelnemers.insert({
+        spelernaam: userName,
+        spelcode: spelcode.toString(),
+        spelercolor:c,
+        createdAt: new Date(), // current time
+      });
+      console.log('participant added: '+ id)
       return id; //[BUG!]
     },
     givePoints: function(userId){
@@ -86,11 +104,11 @@
         };
       },
     removeAllPoints: function() {
-        return Points.remove({});
-
+         return Points.remove({});
       },
     undoPoints: function(noteid) {
-      return Points.remove({});
+      console.log('remove all with noteid: '+ noteid);
+      return Points.remove({noteID: noteid});
 
       },    
     deleteNote: function(idNote) {

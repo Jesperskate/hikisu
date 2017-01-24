@@ -22,7 +22,7 @@ if (Meteor.isClient) {
       'padding': 256,
       'tolerance': 70
     });
-
+    slideout.disableTouch();
 
   });
 
