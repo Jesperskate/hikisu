@@ -184,7 +184,7 @@ Canvas = function () {
       .attr('height', height)
       .attr('class', noteid)
     .append("g")
-      .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+      .call(d3.behavior.zoom().scaleExtent([0.5, 8]).on("zoom", zoom))
     .append("g");
   };
 
@@ -254,8 +254,8 @@ Canvas = function () {
   function zoom() {
     var a = Session.get('moveAllowed');
     if(a === true){
-      // svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); with zoom
-      svg.attr("transform", "translate(" + d3.event.translate + ")");
+      svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); //with zoom
+      // svg.attr("transform", "translate(" + d3.event.translate + ")");
     }
     else{ 
       return false;

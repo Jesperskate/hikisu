@@ -108,13 +108,15 @@
       },
     undoPoints: function(noteid) {
       console.log('remove all with noteid: '+ noteid);
-      return Points.remove({noteID: noteid});
+      var s = noteid+' mobileFull';
+      // Points.remove({noteID:s}); // remove with full class id_mobileFull...
+      // Points.remove({noteID: noteid});
+      Points.remove({}); // jest remove all for the demo
 
       },    
     deleteNote: function(idNote) {
         Points.remove({});
         Logs.remove(idNote);
-
       },
     logoutPlayer: function(userID){
       //[BUG] functie is undefined bij layout.js
