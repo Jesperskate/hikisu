@@ -1,6 +1,6 @@
 
 var canvas;
-
+// var canvasArray = [];
 
 Session.set('moveAllowed', false);
 
@@ -8,21 +8,7 @@ Deps.autorun( function () {
   Meteor.subscribe('points');
 });
 
-Meteor.startup( function() {
-  Deps.autorun( function() {
-    var data = Points.find({}).fetch();
-    if (canvas) {
-      console.log('is canvas now do canvas.draw(data): '+data);
-        canvas.draw(data);
-        // var sessieCode = Router.current().params._id;
-        // var countLogs = Logs.find({spelcode: sessieCode}).count();
-        // console.log('DEP AUTORUN',sessieCode, countLogs);
-    }
-  });
-});
-
-
-
+// Once 
 Template.note.onRendered(function() {
   console.log(document && document.getElementById("canvas"));
     
@@ -33,8 +19,24 @@ Template.note.onRendered(function() {
   //dit moet in een array om alle canvassen apart te laten werken
   canvas = new Canvas();
   canvas.draw();  
+  console.log('NOTE onRENDERED')
 
 });
+
+// Continu refresh
+Meteor.startup( function() {
+  Deps.autorun( function() {
+    var data = Points.find({}).fetch();
+    if (canvas) {
+        canvas.draw(data);
+        var sessieCode = Router.current().params._id;
+        var countLogs = Logs.find({spelcode: sessieCode}).count();
+        console.log('DEP AUTORUN',sessieCode, countLogs);
+    }
+  });
+});
+
+
  
 Template.canvas.helpers({
   height: function(){

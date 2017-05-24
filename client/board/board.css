@@ -173,3 +173,14 @@ body, html{
     display: none;
   }
 }
+
+#nameinput, #submitBtn, #goback{
+  display: none;
+}
+.roundi{
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 50%;
+  color: grey;
+  cursor: pointer;
+}

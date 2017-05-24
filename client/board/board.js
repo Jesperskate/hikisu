@@ -370,7 +370,96 @@ Template.board.helpers({
       }
   });
 
+Template.joinbox.events({
+    'change #spelcode': function(event, template){
+      event.preventDefault();
+      // on change validating inout of code 
+      var self = event.target;
+      var code = self.value;
+      console.log('Code length of input is: '+code.length);
+
+      if (isInt(code)) {
+        console.log('code is integer');
+      };
+      if (code.length > 5) {
+        console.log('code is too long');
+        $(self).css('border','2px solid red')
+        return false
+      }
+      if (code.length < 2) {
+        console.log('code is too short');
+        $(self).css('border','2px solid red')
+        return false
+      }
+      else
+        $(self).css('border','2px solid green')
+        console.log('Code is right: '+code);
+
+        //find session with code
+        //Check if joining is allowed
+        $(self).hide();
+        $('#nameinput').show();
+        $('#submitBtn').show();
+        $('#goback').show();
+
+        // disable enter for submit 
+
+    },
+    'click #goback': function(){
+        $('#spelcode').show();
+        $('#nameinput').hide();
+        $('#submitBtn').hide();
+        $('#goback').hide();
+
+    },
+    'submit':function(event, template){
+      event.preventDefault();
+      var typespel = 1;
+      var spelernaam = event.target.nameinput.value;
+      var spelcode = event.target.spelcode.value;
 
 
+
+      if (!spelcode || spelcode === undefined) {
+        console.log('Code is required');
+         $('#spelcode').css('border', '1px solid red'); 
+        return false;
+      }
+      var checkExist = Deelnemers.findOne({'spelernaam': spelernaam, 'spelcode': spelcode});
+
+      if (checkExist) {
+          FlashMessages.sendSuccess('You are already in the meeting ');
+          Meteor.popDown('addParticipant');
+          Router.go('/b/'+spelcode);
+          return false;
+      }
+      else {
+        Meteor.call('addParticipant', spelernaam, spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+
+                  Session.setPersistent('spelerid', result);
+                  var sc =Deelnemers.findOne({_id: result}).spelercolor;
+                  Session.setPersistent('color', sc);
+              }
+          });        
+      }
+       
+        event.target.spelcode.value = ""; //clear input field
+        Session.setPersistent("spelernaam", spelernaam);
+        Meteor.popDown('addParticipant');
+        Router.go('/b/'+spelcode);
+        FlashMessages.sendSuccess("Adding participant done");
+
+
+    }
+
+});
+
+function isInt(value) {
+  return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+}
 
 

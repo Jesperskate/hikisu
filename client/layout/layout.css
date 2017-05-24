@@ -190,7 +190,8 @@ section li{
     height: 50px;
 }
 .footer{
-      height: 415px;
+    height: auto;
+    /*height: 415px;*/
     background-color: #2e2e2e;
     color: white;
 }

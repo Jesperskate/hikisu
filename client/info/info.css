@@ -11,7 +11,8 @@
 
 #section-one {
   /*background: #393556;*/
-    background-image: url(images/trigger1.jpg);
+    /*background-image: url(images/trigger1.jpg);*/
+    background-image: url(images/ipad-screen.jpg);
     background-repeat: no-repeat;
     padding: 11%;
     background-position: center top;     
@@ -309,9 +310,11 @@ fieldset[disabled] .btn-default.active {
 }
 
 .btn-primary {
-    border-color: #FF6138;
+    border-color: #c41e3a;
+    /*border-color: #FF6138; for adidas */
     color: #fff;
-    background-color: #FF6138;
+    background-color: #c41e3a;
+    /*background-color: #FF6138;*/
     -webkit-transition: all .35s;
     -moz-transition: all .35s;
     transition: all .35s;
@@ -425,7 +428,7 @@ fieldset[disabled] .btn-primary.active {
     color: white;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    /*width: 50%;*/
     /* font-weight: 300; */
     padding: 10px;
     margin-top: 45px;
@@ -796,4 +799,26 @@ left: 50%;
   margin-top: 50px !important;
   margin-bottom: 50px !important;
 
+}
+
+.frontBtn{
+  padding: 30px;
+  cursor: pointer;
+  color: white;
+  font-size: 25px;
+}
+.frontBtn:hover{
+  opacity: 0.8;
+  }
+#prototypeBtn{
+  background: #c41e3a;
+
+}
+#posterBtn{
+  background: #2b2b28;
+
+}
+
+footer ul li{
+  cursor: pointer;
 }
