@@ -1,0 +1,12 @@
+{
+  "name": "Hikisu",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.42",
+    "bcrypt": "^4.0.1",
+    "meteor-node-stubs": "^0.3.2"
+  }
+}

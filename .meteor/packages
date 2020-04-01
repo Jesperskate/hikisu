@@ -4,13 +4,13 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-insecure
+insecure@1.0.7
 jquery
 twbs:bootstrap
 mizzao:jquery-ui
 iron:router
-accounts-ui
-accounts-password
+accounts-ui@1.3.1
+accounts-password@1.6.0
 chriswessels:slideout
 mrt:flash-messages
 pauli:accounts-linkedin
@@ -19,30 +19,32 @@ jeremy:snapsvg
 coffeescript
 johnantoni:meteor-appear
 matb33:bootstrap-glyphicons
-accounts-oauth
+accounts-oauth@1.2.0
 awatson1978:browser-detection
 gravitum:popup-views
 
-meteor-base
-mobile-experience
-mongo
+meteor-base@1.4.0
+mobile-experience@1.1.0
+mongo@1.9.0
 blaze-html-templates
-session
-tracker
-logging
-reload
-random
-ejson
+session@1.2.0
+tracker@1.2.0
+logging@1.1.20
+reload@1.3.0
+random@1.2.0
+ejson@1.1.1
 spacebars
-check
-standard-minifier-css
-standard-minifier-js
+check@1.3.1
+standard-minifier-css@1.6.0
+standard-minifier-js@2.6.0
 
-u2622:persistent-session
 fortawesome:fontawesome
 d3
-ecmascript
+ecmascript@0.14.2
 cfs:filesystem
 cfs:standard-packages
 
 msand:d3zoompanbrushchart
+shell-server
+dynamic-import
+underscore

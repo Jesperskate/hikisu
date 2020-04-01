@@ -3,7 +3,6 @@ Router.configure({
 });
 
 
-
 Router.map(function(){
 	this.route('home',{path:'/home'})
 	this.route('help',{path:'/help'})
