@@ -16,4 +16,4 @@ cd bundle/programs/server && npm install
 
 # deploy app
 cd /srv/meteor_build/bundle
-MONGO_URL=mongodb://localhost:27017/hikisu_1 ROOT_URL=app.jespervoorendt.nl node main.js
+MONGO_URL=mongodb://localhost:27017/hikisu_1 ROOT_URL=http://localhost PORT=3000 nohup node main.js
