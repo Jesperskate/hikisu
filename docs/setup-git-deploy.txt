@@ -1,0 +1,8 @@
+First ssh public key needs to be added to the server.
+Add the production server as a remote repository:
+
+git remote add production ssh://git@188.166.103.233/var/deploy_repos/meteor_app.git/
+
+Now you can push changes to the productionserver with:
+
+git push production
