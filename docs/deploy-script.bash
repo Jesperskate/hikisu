@@ -16,4 +16,4 @@ cd bundle/programs/server && npm install
 
 # deploy app, run as background with nohup. Need better solution. (.service)
 cd /srv/meteor_build/bundle
-MONGO_URL=mongodb://127.0.0.1:27017/hikisu_1 ROOT_URL=http://127.0.0.1 PORT=3000 nohup node main.js &
+MONGO_URL=mongodb://127.0.0.1:27017/hikisu_1 HTTP_FORWARDED_COUNT=1 ROOT_URL=http://127.0.0.1 PORT=3000 nohup node main.js &
