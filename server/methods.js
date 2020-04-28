@@ -2,6 +2,18 @@
     // General methods
 
     // Game methods
+    newGame: function(spelnaam, spelcode){
+      var id = Spellen.insert({
+          naam: spelnaam,
+          speltype: 1,
+          spelcode: spelcode,
+          createdAt: new Date() // current time
+        });
+      console.log("Method is called: newGame");
+
+      return id;
+
+    },   
     addPlayer: function(userName, spelcode){
       var id = Deelnemers.insert({
         spelernaam: userName,
@@ -107,12 +119,11 @@
          return Points.remove({});
       },
     undoPoints: function(noteid) {
-      console.log('remove all with noteid: '+ noteid);
-      var s = noteid+' mobileFull';
-      // Points.remove({noteID:s}); // remove with full class id_mobileFull...
-      // Points.remove({noteID: noteid});
-      Points.remove({}); // jest remove all for the demo
-
+        console.log('remove all with noteid: '+ noteid);
+        var s = noteid+' mobileFull';
+        // Points.remove({noteID:s}); // remove with full class id_mobileFull...
+        // Points.remove({noteID: noteid});
+        Points.remove({}); // jest remove all for the demo
       },    
     deleteNote: function(idNote) {
         Points.remove({});
@@ -126,6 +137,5 @@
         // roept niet hier aan
         console.log('drawPopUp element: '+this);
         return true;
-
     }
   });

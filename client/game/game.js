@@ -32,7 +32,6 @@
       var find = Deelnemers.find({spelcode: Router.current().params._id}, {_id:1}).fetch();
       console.log(find[0]._id);
       for (var i = 0; i < find.length; i++) {
-
         Meteor.call('removePlayer',find[i]._id);
       };
     },
@@ -59,26 +58,25 @@ Template.addGame.events ({
         console.log('Naam is vereist');
          $('#spelnaam').css('border', '1px solid red'); 
         return false;
+      }else{
+         Meteor.call('newGame', spelnaam, spelcode,
+          function(error, result){
+              if(error){
+                  console.log(error);
+              } else {
+                  console.log('Added new game: '+result);
+              }
+          });       
       }
-        Spellen.insert({
-          naam: spelnaam,
-          speltype: typespel,
-          spelcode: spelcode,
-          createdAt: new Date() // current time
-        });
 
       var spelcodeStr =  spelcode.toString();
 
       console.log("Spel aangemaakt en spelcodeStr: "+spelcodeStr);
        
         event.target.spelnaam.value = "";
-
-
           Meteor.popDown('addGame');
           Router.go('/game/'+spelcode);
-
           FlashMessages.sendSuccess("Nieuw spel gelukt");
-
     }
   });
 
@@ -113,13 +111,13 @@ Template.addPlayer.events ({
                   console.log(error);
               } else {
                   console.log('Added deelnemer._id: '+result);
-                  Session.setPersistent('spelerid', result);
+                  Session.set('spelerid', result);
               }
           });        
       }
        
         event.target.spelcode.value = ""; //clear input field
-        Session.setPersistent("spelernaam", spelernaam);
+        Session.set("spelernaam", spelernaam);
         Meteor.popDown('addPlayer');
         Router.go('/game/'+spelcode);
         FlashMessages.sendSuccess("Nieuwe deelnemer toevoegen gelukt");
@@ -149,19 +147,11 @@ Template.game.helpers({
       return Deelnemers.find({spelcode: sessieCode});
     },
     displayBox: function(input) {
-        // input is y (gamma)
-        // if ( input > 70 && input < 210){
-        //   return 'hide';
-        // }
-        // else {
-          return 'show';
-        // }
+       return 'show';
       },
     displayScore: function(score) {
-
         if (score < 101){
           return score+'%';
-
         }else{
           return '100%';
         }
@@ -212,13 +202,6 @@ if (window.DeviceOrientationEvent) {
         var accx = Math.round(event.accelerationIncludingGravity.x*10) / 10;
         var accy = Math.round(event.accelerationIncludingGravity.y*10) / 10;
         var accz = Math.round(event.accelerationIncludingGravity.z*10) / 10;
-
-        // Misschien is dit sneller:
-        // if (accx !== null && accy !== null && accz !== null) {
-        //   accx.toFixed(0);
-        //   accy.toFixed(0);
-        //   accz.toFixed(0);
-        // };
         var acceleray = [
           accx,
           accy,

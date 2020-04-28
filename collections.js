@@ -6,10 +6,11 @@ Votes = new Mongo.Collection("votes");
 Persons = new Mongo.Collection("persons");
 Logs = new Mongo.Collection("logs");
 
+// GAME
 Spellen = new Mongo.Collection("spellen");
 Deelnemers = new Mongo.Collection("deelnemers");
-
 Points = new Meteor.Collection('pointsCollection');
+// GAME
 
 YourFileCollection = new FS.Collection("yourFileCollection", {
     stores: [new FS.Store.FileSystem("yourFileCollection", {path: "~/public/images"})]
@@ -72,6 +73,12 @@ if (Meteor.isServer) {
 
     Spellen.allow({
       insert: function (userId, doc) {
+        return !!userId;
+      },
+      update: function (userId, doc) {
+        return !!userId;
+      },
+      remove: function(userId, doc){
         return !!userId;
       }
     });

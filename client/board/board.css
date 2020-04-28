@@ -18,14 +18,14 @@ body, html{
   padding-top: 10px;
 
 }
-.actcard{
+/*.actcard{
   color: white;
   margin-top: 5px;
   padding: 5px;
-  border-radius: 50%;
+  border-radius: 5px;
   height: 100%;
 
-}
+}*/
 .modal-body{
   display: block !important;
 }

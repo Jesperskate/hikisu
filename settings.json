@@ -1,7 +1,8 @@
 {
   "galaxy.meteor.com": {
     "env": {
-      "MONGO_URL": "mongodb://localhost:27017"
+    	"ROOT_URL": "http://atlantit.meteorapp.com/", 
+      	"MONGO_URL": "mongodb://atlantit:testtest@hikisu-shard-00-00-tqd1x.azure.mongodb.net:27017"
     }
-  },
+  }
 }
